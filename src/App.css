@@ -1,0 +1,48 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 80px;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.flex-wrapper {
+  width:100vw;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction:row;
+}
+
+.min {
+  min-height:65vh;
+}
+
+.mymeals {
+  margin-top: 10vw;
+}
+
+.mymeals .recomm {
+  display: none;
+}
+
+.mymeals img {
+  width:26vw;
+  height:20vw;
+}
+
+@media screen and (max-width:500px) {
+
+  .mymeals img {
+    width:90vw;
+    height:60vw;
+  }
+  
+}

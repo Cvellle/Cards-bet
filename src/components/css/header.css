@@ -1,0 +1,173 @@
+
+.login {
+    position: absolute
+}
+
+.App-header {
+    padding-right:6vw;
+    padding-top:3vw;
+    padding-left:6vw;
+  }
+
+.navL {
+    margin-left:4vw;
+    font-size:1.2vw;
+    font-weight: 600;
+    color:black !important;
+}
+
+.headersearch {
+    border-radius: 0 !important;
+    height:100%;
+    margin-right:2vw;
+    background:transparent;
+}
+
+.loginForm {
+    position: relative;    
+    background: #fafafa;
+    color: #FFF;
+    text-decoration: none;
+    height:7.5vw;
+    width:15vw;
+    padding-left:0;
+    padding-right:0;
+    padding-top:1vw;
+    border:none !important;
+    transform:translatex(-3.5vw);
+    font-size:1vw;
+    box-shadow:0vw -0vw 0.3vw rgb(151, 150, 150);  
+  }
+  
+.loginForm .txt {
+    border-radius:0.6rem;
+    border:1px solid rgb(177, 174, 174);
+    margin-bottom:0.4vw;
+    width:13.5vw;
+    height:1.7vw;
+    padding-left: 0.5vw;
+}
+
+.loginForm .log {
+    border-radius:1rem;
+    border:none;
+    background:#f9982d;
+    width:9vw;
+    color:white;
+    transform:translatex(-.2vw);
+    height:1.7vw;
+}
+
+.loginForm:after {
+    content: '';
+    display: block;  
+    position: absolute;
+    left: 4vw;
+    bottom: 100%;
+    width: 0;
+    height: 0;
+    border-bottom: 0.5vw solid #fafafa;
+    border-top: 0.5vw solid transparent;
+    border-left: 0.5vw solid transparent;
+    border-right: 0.5vw solid transparent;
+}
+
+.loginImg {
+    position: relative;
+    left:-3vw;
+    align-items:center;
+    top:0;
+    height:2vw;
+    width:2vw;
+    cursor: pointer;
+    margin:auto;
+    display: flex;
+    justify-content: center;
+    margin-top:-1.05vw;
+}
+
+.loged a {
+    margin-left:0.5vw;
+}
+
+.loged a:hover {
+    color:black;
+}
+
+
+
+
+
+@media screen and (max-width:500px) {
+
+    header .form-control {
+        width:28vw !important;
+        margin-left:3vw;
+    }
+
+    header img {
+        transform: scale(3.5);
+    }
+
+    .navL {
+        font-size: 3.5vw !important;
+    }
+
+    .loged {
+        position: absolute;
+        right:6vw;
+        top:13vw;
+        font-size: 3vw;
+    }
+
+    .loged .navL {
+        position: absolute;
+        right:0;
+        top:5vw;
+        font-size: 1vw;
+    }
+
+    .loginForm {
+        height:23vw;
+        width:45vw;
+        box-shadow:0vw -0vw 0.9vw rgb(151, 150, 150);  
+    }
+
+    .loginForm .txt {
+        border-radius:0.6rem;
+        border:1px solid rgb(177, 174, 174);
+        margin-bottom:0.4vw;
+        width:44vw;
+        height:7vw;
+        padding-left: 1.5vw;
+        font-size: 3vw;
+    }
+    
+    .loginForm .log {
+        border-radius:1rem;
+        border:none;
+        background:#f9982d;
+        width:30vw;
+        height:15vw;
+        color:white;
+        transform:translatex(-.2vw);
+        height:6vw;
+        font-size: 3.7vw;
+    }
+    
+    .loginForm:after {
+        content: '';
+        display: block;  
+        position: absolute;
+        left: 5.3vw;
+        bottom: 100%;
+        width: 0;
+        height: 0;
+        border-bottom: 1.5vw solid #fafafa;
+        border-top: 1.5vw solid transparent;
+        border-left: 1.5vw solid transparent;
+        border-right: 1.5vw solid transparent;
+    }
+    
+}
+

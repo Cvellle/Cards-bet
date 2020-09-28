@@ -1,0 +1,42 @@
+
+.randomItem {
+    padding-left:1vw;
+    transform: translateY(-4vw);
+}
+
+.randomItem p {
+    font-size: 1.7vw;
+}
+
+.randomItem img {
+    height:20vw;
+    width:26vw;
+}
+
+.randomName {
+    margin-left:-2vw;
+}
+
+
+
+@media screen and (max-width:500px) {
+
+    .randomItem img {
+        height:60vw;
+        width:84vw;
+    }
+    
+    .item img {
+        height:60vw;
+        width:84vw;
+    }
+
+    h2 {
+        font-size: 6vw !important;
+    }
+
+    .randomItem p {
+        font-size: 5vw !important;
+    }
+
+}
