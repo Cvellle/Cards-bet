@@ -3,10 +3,12 @@ import { connect } from "react-redux";
 import {
   setStartBoolean,
   setSuccessBoolean,
+  resetGame,
   resetNotShownCards,
   resetShownCards,
   showHiddenCard,
   startComparing,
+  moveToGuessed,
 } from "../store/actions";
 import "./css/random.css";
 
@@ -18,78 +20,83 @@ class Interface extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.shown !== this.props.shown) {
-      this.props.shown.length > 1 && this.takeLastTwoShown();
+    if (prevProps.comparing !== this.props.comparing) {
+      let reversed = this.props.shown.reverse();
+      if (this.state.comparation == "smaller" && this.props.comparing) {
+        reversed[0].number < reversed[1].number
+          ? this.onSuccess()
+          : this.onFailure();
+      }
+      if (this.state.comparation == "bigger" && this.props.comparing) {
+        reversed[0].number > reversed[1].number
+          ? this.onSuccess()
+          : this.onFailure();
+      }
+      this.setState({ comparation: null });
     }
-    if (prevState.comparation !== this.state.comparation) {
-      this.biggerOrSmaller(this.state.comparation);
-    }
-    // if (prevProps.hiddenCard !== this.props.hiddenCard) {
-    //   this.props.showHiddenCard(false);
-    // }
   }
 
-  takeLastTwoShown = () => {
-    this.setState({
-      firstCard: this.props.shown[0].number,
-      secondCard: this.props.shown[1].number,
-    });
+  startBetting = () => {
+    this.props.setStartBoolean(true);
   };
 
-  setComparisonInState = (comparisonFromButton) => {
-    this.props.showHiddenCard(true);
-    this.props.startComparing(true);
-    if (comparisonFromButton == "bigger") {
-      this.setState({ comparation: "bigger" });
-    }
-    if (comparisonFromButton == "smaller") {
-      this.setState({ comparation: "smaller" });
-    }
+  isItSmaller = () => {
+    this.setState(
+      {
+        comparation: "smaller",
+      },
+      () => {
+        this.props.showHiddenCard(true);
+      }
+    );
   };
 
-  biggerOrSmaller = (comparisonFromState) => {
-    if (comparisonFromState == "bigger") {
-      this.state.firstCard < this.state.secondCard
-        ? console.log("true")
-        : console.log("false");
-      this.setState({ comparation: null });
-    }
-    if (comparisonFromState == "smaller") {
-      this.state.firstCard > this.state.secondCard
-        ? console.log("true")
-        : console.log("false");
-      this.setState({ comparation: null });
-    }
-    this.onSuccess();
+  isItBigger = () => {
+    this.setState(
+      {
+        comparation: "bigger",
+      },
+      () => {
+        this.props.showHiddenCard(true);
+      }
+    );
   };
 
   onSuccess = () => {
     setTimeout(() => {
       this.props.hiddenCard == true && this.props.showHiddenCard(false);
+      this.props.startComparing(false);
       this.props.setSuccessBoolean(true);
     }, 2000);
+    let reversed = this.props.shown.reverse();
+    let oldCardObject = reversed[0];
+    let isItSmallerProp = { biggerOrSmaller: this.state.comparation };
+    let newGuessedObject = { ...oldCardObject, ...isItSmallerProp };
+    this.props.moveToGuessed(newGuessedObject);
+    console.log("true");
   };
 
   onFailure = () => {
-    alert("Wrong");
+    this.resetGame();
+    console.log("False, Game has been reset");
   };
 
   newGame = () => {
     this.props.resetNotShownCards();
     this.props.resetShownCards();
-    this.loadImage();
+    this.startBetting();
     this.props.showHiddenCard(false);
+    this.props.startComparing(false);
+    this.props.resetGame(true);
   };
 
   resetGame = () => {
     this.props.resetNotShownCards();
     this.props.resetShownCards();
-    this.loadImage();
+    this.startBetting();
     this.props.showHiddenCard(false);
-  };
-
-  loadImage = () => {
-    this.props.setStartBoolean(true);
+    this.props.startComparing(false);
+    this.props.resetGame(true);
   };
 
   render() {
@@ -97,12 +104,8 @@ class Interface extends Component {
       <div>
         <button onClick={this.newGame}>New game</button>
         <button onClick={this.resetGame}>Reset game</button>
-        <button onClick={() => this.setComparisonInState("smaller")}>
-          Lower
-        </button>
-        <button onClick={() => this.setComparisonInState("bigger")}>
-          Higher
-        </button>
+        <button onClick={this.isItSmaller}>Lower</button>
+        <button onClick={this.isItBigger}>Higher</button>
         <div className="text-left randomDetails">
           All coins:{this.props.allCoins}
         </div>
@@ -115,12 +118,16 @@ class Interface extends Component {
 const mapStateToProps = ({
   allCoins,
   start,
+  success,
+  success2,
   shown,
   comparing,
   hiddenCard,
 }) => ({
   allCoins,
   start,
+  success,
+  success2,
   shown,
   comparing,
   hiddenCard,
@@ -128,10 +135,12 @@ const mapStateToProps = ({
 const mapDispatchToProps = {
   setStartBoolean,
   setSuccessBoolean,
+  resetGame,
   resetNotShownCards,
   resetShownCards,
   showHiddenCard,
   startComparing,
+  moveToGuessed,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Interface);

@@ -24,6 +24,13 @@ export const resetShownCards = () => {
   };
 };
 
+export const moveToGuessed = (toGuessed) => {
+  return {
+    type: "SET_GUESSED",
+    toGuessed,
+  };
+};
+
 // START BOOLEANS
 export const setStartBoolean = (startChange) => {
   return {
@@ -43,6 +50,13 @@ export const setSuccessBoolean = (successChange) => {
   return {
     type: "SET_SUCCESS",
     successChange,
+  };
+};
+
+export const resetGame = (reseted) => {
+  return {
+    type: "SET_RESET",
+    reseted,
   };
 };
 

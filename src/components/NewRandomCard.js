@@ -7,11 +7,10 @@ import {
   showHiddenCard,
   setSuccessBoolean,
   firstStartChange,
-  resetGame,
 } from "../store/actions";
 import "./css/cardboard.css";
 
-class RandomCard extends Component {
+class NewRandomCard extends Component {
   state = {
     image: null,
     number: null,
@@ -19,42 +18,28 @@ class RandomCard extends Component {
   };
 
   componentDidMount() {
-    // !this.props.firstStart && this.loadImage();
-    // this.props.firstStartChange(false);
-    console.log("start");
+    this.loadImage();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.firstStart !== this.props.firstStart) {
-      this.props.firstStart == true && this.loadImage();
-      this.props.firstStartChange(false);
+    if (prevProps.start !== this.props.start) {
+      this.props.start == true && this.loadImage();
+      this.props.setStartBoolean(false);
     }
-    if (prevProps.reset !== this.props.reset) {
-      this.props.reset == true && this.loadImage();
-      this.props.resetGame(false);
+    if (this.props.firstRandom) {
+      if (
+        prevProps.success !== this.props.success &&
+        this.props.success == true
+      ) {
+        this.loadImage();
+        this.props.setSuccessBoolean();
+      }
     }
-    // this.props.success == alert("s");
-    if (prevProps.success !== this.props.success) {
-      this.props.success && this.loadImage();
-      this.props.setSuccessBoolean(false);
-    }
-
-    // if (
-    //   prevProps.success2 !== this.props.success2 &&
-    //   this.props.success2 == true
-    // ) {
-    //   this.props.success2 == true && this.loadImage();
-    //   this.props.setSuccessBoolean2(false);
-    // }
-
-    // this.props.hiddenCard == true &&
-    //   setTimeout(() => {
-    //     if (prevProps.hiddenCard !== this.props.hiddenCard) {
-    //       this.props.showHiddenCard(false);
-    //       this.props.setStartBoolean(false);
-    //     }
-    //   }, 2000);
   }
+
+  // componentWillUnmount() {
+  //   // ??????
+  // }
 
   log = () => {
     console.log(this.props.notShown);
@@ -62,7 +47,6 @@ class RandomCard extends Component {
 
   logShown = () => {
     console.log(this.props.shown);
-    // console.log(this.props.guessedCards);
   };
 
   compareNewCard = () => {
@@ -75,8 +59,7 @@ class RandomCard extends Component {
     const num = card.number;
     const cardSign = card.sign;
     this.props.excludeCurrent(card.id);
-    let isItSmallerProp = { smaller: "smaller", bigger: "bigger" };
-    this.props.moveToShown({ ...card, isItSmallerProp });
+    this.props.moveToShown(card);
     this.props.setStartBoolean(false);
 
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
@@ -111,10 +94,7 @@ const mapStateToProps = ({
   start,
   hiddenCard,
   success,
-  success2,
   firstStart,
-  reset,
-  guessedCards,
 }) => ({
   cards,
   notShown,
@@ -122,10 +102,7 @@ const mapStateToProps = ({
   start,
   hiddenCard,
   success,
-  success2,
   firstStart,
-  reset,
-  guessedCards,
 });
 const mapDispatchToProps = {
   excludeCurrent,
@@ -134,7 +111,6 @@ const mapDispatchToProps = {
   showHiddenCard,
   setSuccessBoolean,
   firstStartChange,
-  resetGame,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RandomCard);
+export default connect(mapStateToProps, mapDispatchToProps)(NewRandomCard);

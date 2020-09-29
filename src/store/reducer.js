@@ -59,10 +59,12 @@ const initialState = {
   cards: allCards,
   allCoins: 100,
   start: true,
-  firstStart: true,
+  firstStart: false,
   success: false,
   hiddenCard: false,
   comparing: false,
+  reset: false,
+  guessedCards: [],
 };
 
 export const reducer = (state = initialState, action) => {
@@ -76,12 +78,19 @@ export const reducer = (state = initialState, action) => {
       return { ...state, notShown: state.cards };
     case "RESET_SHOWN":
       return { ...state, shown: [] };
+    case "SET_GUESSED":
+      return {
+        ...state,
+        guessedCards: [...state.guessedCards, action.toGuessed],
+      };
     case "SET_START":
       return { ...state, start: action.startChange };
     case "FIRST_START":
       return { ...state, firstStart: action.fstart };
     case "SET_SUCCESS":
       return { ...state, success: action.successChange };
+    case "SET_RESET":
+      return { ...state, reset: action.reseted };
     case "SHOW_CARD":
       return { ...state, hiddenCard: action.changeHidden };
     case "START_COMPARING":

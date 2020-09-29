@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import RandomCard from "../components/RandomCard";
+import NewRandomCard from "../components/NewRandomCard";
 import "./css/home.css";
-import { firstStartChange } from "../store/actions";
+import { firstStartChange, startComparing } from "../store/actions";
+import { cardBack } from "../images/cardback.png";
 
 class Cardboard extends Component {
   componentDidMount() {
     this.props.firstStartChange(true);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.hiddenCard !== this.props.hiddenCard) {
-      this.props.firstStartChange(false);
+  componentDidUpdate(prevState) {
+    if (prevState.shown !== this.props.shown) {
+      this.props.hiddenCard && this.props.startComparing(true);
     }
   }
 
@@ -20,13 +22,12 @@ class Cardboard extends Component {
       <div>
         <RandomCard firstRandom="firstRandom" />
         {this.props.hiddenCard ? (
-          // <NewRandomCard shown={this.props.shown} newRandom="newRandom" />
-          <RandomCard newRandom="newRandom" />
+          <NewRandomCard newRandom="newRandom" />
         ) : (
-          "back card image"
+          <img src={cardBack} />
         )}
         <div>
-          Already guesed
+          Already shown cards list:
           <ul>
             {this.props.shown.map((it) => (
               <li key={it.id} className="listItem">
@@ -34,42 +35,24 @@ class Cardboard extends Component {
               </li>
             ))}
           </ul>
+          Guesed cards list:
+          <ul>
+            {this.props.guessedCards &&
+              this.props.guessedCards.map((it) => (
+                <li key={it.id} className="listItem">
+                  {it.number} {it.sign} {it.biggerOrSmaller}
+                </li>
+              ))}
+          </ul>
         </div>
       </div>
     );
   }
 }
 
-// const PreviousCards = this.props.shown.map((it) => (
-//   <li key={it.id} className="listItem">
-//     ${it.id}
-//   </li>
-// ));
-
-// function wrapRandomCard(Wrapped) {
-//   return class extends React.Component {
-//     componentDidMount() {
-//       this.takeCurrentCard();
-//     }
-//     takeCurrentCard = () => {
-//       // console.log(this.props.shown.pop());
-//     };
-
-//     render() {
-//       return <Wrapped {...this.props.shown} {...this.props.newRandom} />;
-//     }
-//   };
-// }
-
-// const NewRandomCard = wrapRandomCard(RandomCard);
-
-const mapStateToProps = ({ shown, hiddenCard, firstStart }) => ({
-  shown,
-  hiddenCard,
-  firstStart,
-});
-const mapDispatchToProps = {
-  firstStartChange,
+const mapStateToProps = ({ hiddenCard, shown, guessedCards }) => {
+  return { hiddenCard, shown, guessedCards };
 };
+const mapDispatchToProps = { firstStartChange, startComparing };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cardboard);
