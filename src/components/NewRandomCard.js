@@ -7,8 +7,27 @@ import {
   showHiddenCard,
   setSuccessBoolean,
   firstStartChange,
+  moveToLastGuessed,
 } from "../store/actions";
 import "./css/cardboard.css";
+import { Image, Group, Text } from "react-konva";
+import useImage from "use-image";
+const ww = window.innerWidth;
+const wh = window.innerHeight;
+
+// the first very simple and recommended way:
+const NewImageToRender = (prop) => {
+  const [image] = useImage(prop.im);
+  return (
+    <Image
+      image={image}
+      x={ww / 2}
+      y={wh / 20}
+      width={ww / 10}
+      height={ww / 7}
+    />
+  );
+};
 
 class NewRandomCard extends Component {
   state = {
@@ -23,15 +42,11 @@ class NewRandomCard extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.start !== this.props.start) {
-      this.props.start == true && this.loadImage();
+      this.props.start && this.loadImage();
       this.props.setStartBoolean(false);
     }
     if (this.props.firstRandom) {
-      if (
-        prevProps.success !== this.props.success &&
-        this.props.success == true
-      ) {
-        this.loadImage();
+      if (prevProps.success !== this.props.success && this.props.success) {
         this.props.setSuccessBoolean();
       }
     }
@@ -40,18 +55,6 @@ class NewRandomCard extends Component {
   // componentWillUnmount() {
   //   // ??????
   // }
-
-  log = () => {
-    console.log(this.props.notShown);
-  };
-
-  logShown = () => {
-    console.log(this.props.shown);
-  };
-
-  compareNewCard = () => {
-    console.log(this.props.shown);
-  };
 
   loadImage = () => {
     const index = Math.floor((this.props.notShown.length - 1) * Math.random());
@@ -64,25 +67,32 @@ class NewRandomCard extends Component {
 
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
       (image) => {
-        this.setState({
-          image: image,
-          number: num,
-          sign: cardSign,
-        });
+        this.setState(
+          {
+            image: image,
+            number: num,
+            sign: cardSign,
+          },
+          () => {
+            setTimeout(() => {
+              this.props.moveToLastGuessed(image);
+            }, 2000);
+          }
+        );
       }
     );
-    console.log("made");
   };
+
   render() {
     const { image } = this.state;
     return (
-      <div>
-        <button onClick={this.log}>see rest</button>
-        <button onClick={this.logShown}>see shown</button>
-        {image && <img src={image} alt="" className="randomCard" />}
-        <p className="text-left">{this.state.number}</p>
-        <p className="text-left">{this.state.sign}</p>
-      </div>
+      <Group>
+        <Text
+          text={`${this.state.number} of ${this.state.sign}`}
+          fontSize={15}
+        />
+        <NewImageToRender im={this.state.image} />
+      </Group>
     );
   }
 }
@@ -111,6 +121,7 @@ const mapDispatchToProps = {
   showHiddenCard,
   setSuccessBoolean,
   firstStartChange,
+  moveToLastGuessed,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewRandomCard);

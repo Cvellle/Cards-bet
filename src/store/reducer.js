@@ -51,24 +51,35 @@ const allCards = [
   { number: 1, sign: "diamonds", shown: false, id: 3 },
   { number: 1, sign: "hearts", shown: false, id: 2 },
   { number: 1, sign: "spades", shown: false, id: 1 },
+  // { number: 3, sign: "spades", shown: false, id: 9 },
+  // { number: 2, sign: "spades", shown: false, id: 5 },
+  // { number: 1, sign: "clubs", shown: false, id: 4 },
 ];
 
 const initialState = {
-  notShown: allCards,
-  shown: [],
+  game: "Smooth Bet",
   cards: allCards,
-  allCoins: 100,
+  notShown: JSON.parse(localStorage.getItem("notShown-cardsBet")) || allCards,
+  shown: JSON.parse(localStorage.getItem("shown-cardsBet")) || [],
+  allCoins: Number(localStorage.getItem("allCoins-cardsBet")) || Number(100),
+  betCoins: Number(localStorage.getItem("betCoins-cardsBet")) || Number(10),
+  earnedCoins:
+    Number(localStorage.getItem("earnedCoins-cardsBet")) || Number(0),
   start: true,
   firstStart: false,
   success: false,
   hiddenCard: false,
   comparing: false,
+  compariation: null,
   reset: false,
-  guessedCards: [],
+  guessedCards: JSON.parse(localStorage.getItem("guessed-cardsBet")) || [],
+  importedImages: [],
+  lastGuessed: null,
 };
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
+    // CARDS ARRAYS
     case "FILTER_UNSHOWN":
       const notShown = state.notShown.filter((ob) => ob.id !== action.toRemove);
       return { ...state, notShown };
@@ -83,6 +94,29 @@ export const reducer = (state = initialState, action) => {
         ...state,
         guessedCards: [...state.guessedCards, action.toGuessed],
       };
+    case "RESET_GUESSED":
+      return { ...state, guessedCards: [] };
+
+    // IMAGES
+    case "SET_IMPORTED":
+      return {
+        ...state,
+        importedImages: [...state.importedImages, action.toImported],
+      };
+    case "RESET_IMPORTED":
+      return { ...state, importedImages: [] };
+    case "SET_LASTGUESSED":
+      return { ...state, lastGuessed: action.toLastGuessed };
+
+    //COINS AMOUNTS
+    case "SET_ALL_COINS":
+      return { ...state, allCoins: action.toAllCoins };
+    case "SET_BET_COINS":
+      return { ...state, betCoins: action.toBetCoins };
+    case "SET_EARNED_COINS":
+      return { ...state, earnedCoins: action.toEarnedCoins };
+
+    //START BOOLEANS
     case "SET_START":
       return { ...state, start: action.startChange };
     case "FIRST_START":
@@ -95,46 +129,9 @@ export const reducer = (state = initialState, action) => {
       return { ...state, hiddenCard: action.changeHidden };
     case "START_COMPARING":
       return { ...state, comparing: action.compare };
+    case "SET_COMPARATION":
+      return { ...state, comparation: action.comparationType };
     default:
       return state;
   }
 };
-
-// case "SET_LOADING":
-//   return { ...state, loading: action.loading };
-// case "SET_ITEMS":
-//   return { ...state, items: action.items };
-// case "SET_FILTERED":
-//   return { ...state, filtered: action.filtered };
-// case "FILTER_BY_CATEGORY":
-//   const filtered = state.items.filter((ob) =>
-//     ob.category.toLowerCase().includes(action.category)
-//   );
-//   return { ...state, filtered };
-// case "FILTER_ITEMS":
-//   const filtered2 = state.filtered.filter((ob) =>
-//     ob.name.toLowerCase().includes(action.critreria)
-//   );
-//   return { ...state, filtered2 };
-// case "FILTER_ITEMS_SEARCH":
-//   const filteredInSearch = state.items.filter((ob) =>
-//     ob.name.toLowerCase().includes(action.fiterSearch)
-//   );
-//   return { ...state, filteredInSearch };
-// case "FILTER_BY_CAT_IN_SEARCH":
-//   const filteredByCatInSearch = state.filteredInSearch.filter((ob) =>
-//     ob.category.toLowerCase().includes(action.ctg)
-//   );
-//   return { ...state, filteredByCatInSearch };
-// case "SELECT_ITEM":
-//   return { ...state, selected: action.selected };
-// case "SET_SEARCH_TRUE":
-//   return { ...state, searchTrue: action.setSearch };
-// case "SHOW_SEARCH_DESC":
-//   return { ...state, searchDescritopn: action.searchDesc };
-// case "ABOUT_SCROLL":
-//   return { ...state, aboutScroll: action.about };
-// case "CONTACT_SCROLL":
-//   return { ...state, contactScroll: action.contact };
-// case "HOME_SCROLL":
-//   return { ...state, homeScroll: action.homescr };

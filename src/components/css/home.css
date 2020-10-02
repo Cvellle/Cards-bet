@@ -1,3 +1,25 @@
-.randomCard {
+.randomCard,
+img {
   width: 10vw !important;
+}
+
+.newRandomCard,
+.backCard {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+}
+
+.s {
+  background-color: rgb(41, 4, 48);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }
