@@ -59,10 +59,10 @@ class NewRandomCard extends Component {
   loadImage = () => {
     const index = Math.floor((this.props.notShown.length - 1) * Math.random());
     const card = this.props.notShown[index];
+    this.props.moveToShown(card);
     const num = card.number;
     const cardSign = card.sign;
     this.props.excludeCurrent(card.id);
-    this.props.moveToShown(card);
     this.props.setStartBoolean(false);
 
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(

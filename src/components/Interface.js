@@ -99,9 +99,7 @@ class Interface extends Component {
     let newGuessedObject = { ...oldCardObject, ...isItSmallerProp };
     this.props.moveToGuessed(newGuessedObject);
     this.props.changeEarnedCoins(this.props.earnedCoins + this.props.betCoins);
-    // } else {
     this.onEnd();
-    // }
   };
 
   onFailure = () => {
