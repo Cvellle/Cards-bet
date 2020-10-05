@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Stage, Layer, Image, Text, Star, Group } from "react-konva";
+import { Layer, Image, Group, RegularPolygon } from "react-konva";
 import useImage from "use-image";
 import { moveToImported } from "../store/actions";
 const ww = window.innerWidth;
@@ -12,12 +12,8 @@ class ShownList extends Component {
     cardsAreImported: false,
   };
 
-  componentDidMount() {
-    // this.importImages();
-  }
-
   componentDidUpdate(prevProps) {
-    if (prevProps.guessedCards !== this.props.guessedCards) {
+    if (prevProps.guessedCards.length !== this.props.guessedCards.length) {
       this.importImages();
     }
     if (prevProps.firstStart !== this.props.firstStart) {
@@ -26,65 +22,64 @@ class ShownList extends Component {
   }
 
   importImages = () => {
-    if (this.props.firstStart) {
+    let guessed = this.props.guessedCards;
+    if (!this.props.success) {
       this.props.guessedCards.map((el, i) => {
         import(`../images/cards/${el.number}_of_${el.sign}.svg`).then(
           (image) => {
-            // this.setState({
-            //   shownCardsState: this.state.shownCardsState.push(image),
-            // }),
-            this.props.moveToImported(image);
+            let arrowInfoObject = {
+              path: image,
+              lowerOrHigher: guessed[i].biggerOrSmaller,
+            };
+            this.props.moveToImported(arrowInfoObject);
           }
         );
       });
-      // ,
-      //   //   this.afterImortedImages();
-      //   console.log(this.props.importedImages);
     } else {
-      let guessed = this.props.guessedCards;
-      let index = this.props.guessedCards.length - 1;
-      // this.props.guessedCards.map((el, i) => {
       if (guessed.length !== 0) {
+        let index = this.props.guessedCards.length - 1;
         import(
           `../images/cards/${guessed[index].number}_of_${guessed[index].sign}.svg`
         ).then((image) => {
-          this.props.moveToImported(image);
+          let arrowInfoObject = {
+            path: image,
+            lowerOrHigher: guessed[index].biggerOrSmaller,
+          };
+          this.props.moveToImported(arrowInfoObject);
         });
       }
     }
-
-    // });
-    // ,
-    //   //   this.afterImortedImages();
-    //   console.log(this.props.importedImages);
-  };
-
-  show = () => {
-    this.setState({
-      cardsAreImported: true,
-    });
   };
 
   render() {
-    // const [image] = useImage(`static/favicon.ico`);
+    let biggerThanComparedCard = "biggerThanComparedCard";
     return (
       <Layer width={window.innerWidth} height={window.innerHeight}>
         {this.props.importedImages.map((el, i) => (
-          <Group key={i}>
-            <ImageInShownList
-              y={20 + i * 45}
-              source={
-                el
-                // `../images/cards/${el.number}_of_${el.sign}.svg`
+          <Group
+            key={i}
+            y={
+              i < 10
+                ? (wh / 100) * i * 6 + (wh / 100) * 5
+                : (wh / 100) * (i - 10) * 6 + (wh / 100) * 5
+            }
+            x={i < 10 ? (ww / 100) * 4 : (ww / 100) * 20}
+          >
+            <ImageInShownList source={el.path} />
+            <RegularPolygon
+              sides={3}
+              radius={10}
+              tension={0.5}
+              x={(wh / 100) * 25}
+              y={(wh / 100) * 2}
+              height={30}
+              fill={
+                el.lowerOrHigher === biggerThanComparedCard ? "green" : "red"
               }
-              //   opacity={0.8}
-              //   shadowColor="black"
-              //   shadowBlur={10}
-              //   shadowOpacity={0.6}
-              //   shadowOffsetX={star.isDragging ? 10 : 5}
-              //   shadowOffsetY={star.isDragging ? 10 : 5}
+              rotation={el.lowerOrHigher === biggerThanComparedCard ? 0 : 180}
+              shadowBlur={5}
+              opacity={0.6}
             />
-            <Text text={"shown"} x={(ww / 100) * 70} y={20 + i * 45} />
           </Group>
         ))}
       </Layer>
@@ -97,10 +92,15 @@ const ImageInShownList = (props) => {
   return (
     <Image
       image={image}
-      x={(ww / 100) * 10}
+      x={props.x}
       y={props.y}
-      width={ww / 10}
-      height={ww / 7}
+      width={wh / 5}
+      height={wh / 3.75}
+      shadowColor="black"
+      shadowBlur={10}
+      shadowOpacity={0.6}
+      shadowOffsetX={15}
+      shadowOffsetY={15}
     />
   );
 };
@@ -110,11 +110,15 @@ const mapStateToProps = ({
   guessedCards,
   importedImages,
   firstStart,
+  reset,
+  success,
 }) => ({
   shown,
   guessedCards,
   importedImages,
   firstStart,
+  reset,
+  success,
 });
 
 const mapDispatchToProps = {

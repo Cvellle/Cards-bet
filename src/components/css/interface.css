@@ -1,0 +1,145 @@
+.interfaceDiv {
+  position: absolute;
+  bottom: 2vh;
+  left: 0;
+  height: 30vh;
+  width: 100%;
+  background: transparent;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+  background-color: transparent;
+  flex: 1 1 33vw;
+}
+
+.gameControls {
+  margin-right: auto;
+  flex: 1 1 33vw;
+}
+
+.interfaceButtons {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 33vw;
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.startButtons {
+  width: 100%;
+}
+
+.startButtons > i {
+  border-radius: 50%;
+  height: 5vw;
+  width: 5vw;
+  border: none;
+  background-color: rgba(112, 8, 72, 0.671);
+  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 2vw;
+  color: white;
+  margin: 0 2vw;
+}
+
+.startButtons > i:hover {
+  filter: brightness(1.1);
+}
+
+.startButtons > i:active {
+  transform: scale(1.1) translate3d(0, 0, 0);
+  -webkit-transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  transition: 0.3s;
+}
+
+.newPlays > button {
+  background-color: rgba(128, 0, 128, 0.432);
+  border: none;
+  height: 3vw;
+  margin: 0.1vw;
+  border-radius: 2vw;
+  color: rgba(255, 255, 255, 0.514);
+  font-weight: 700;
+  width: 10vw;
+  transition: 0.1s;
+}
+
+.newPlays > button:active {
+  background-color: rgba(56, 4, 56, 0.363);
+  transition: 0.1s;
+}
+
+.newPlays > button:hover {
+  filter: brightness(1.1);
+}
+
+.newPlays > button:nth-child(1) {
+  border-radius: 2vw 0 0 2vw;
+}
+
+.newPlays > button:nth-child(2) {
+  border-radius: 0 2vw 2vw 0;
+}
+
+.newPlays > button:nth-child(2):disabled,
+button[disabled] {
+  filter: brightness(0.8);
+}
+
+.newPlays > button:nth-child(2):disabled,
+button[disabled] {
+  cursor: not-allowed;
+}
+
+.coinsDdisplays {
+  margin: 0% 0;
+  height: 100px;
+  margin-left: auto;
+  flex: 1 1 33vw;
+  color: rgba(255, 255, 255, 0.61);
+  font-size: 1.3vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.coinsDdisplays > * {
+  margin: 0.5vw;
+}
+
+.earned {
+  margin-left: 0.5vw;
+  font-size: 2vw;
+}
+
+.allCoins {
+  display: inline-block;
+  position: relative;
+  margin-left: 0.5vw;
+  font-size: 2vw;
+  border-radius: 50%;
+  height: 5vw;
+  width: 5vw;
+  background-color: rgba(255, 217, 0, 0.575);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coinsDdisplays input {
+  height: 2vw;
+  font-size: 1.3vw;
+  background-color: rgba(255, 255, 255, 0.795);
+  border: none;
+  border-radius: 1vw;
+  padding: 1vw;
+}

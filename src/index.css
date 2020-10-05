@@ -11,3 +11,13 @@ img {
 a {
   color: inherit;
 }
+button:active,
+input:active {
+  border: 0;
+  outline: 0;
+}
+button:focus,
+input:focus {
+  border: 0;
+  outline: 0;
+}

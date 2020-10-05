@@ -6,28 +6,14 @@ import {
   setStartBoolean,
   showHiddenCard,
   setSuccessBoolean,
-  firstStartChange,
   moveToLastGuessed,
 } from "../store/actions";
 import "./css/cardboard.css";
-import { Image, Group, Text } from "react-konva";
+import { Image, Group } from "react-konva";
 import useImage from "use-image";
+import { Transition, animated } from "react-spring/dist/konva";
 const ww = window.innerWidth;
 const wh = window.innerHeight;
-
-// the first very simple and recommended way:
-const NewImageToRender = (prop) => {
-  const [image] = useImage(prop.im);
-  return (
-    <Image
-      image={image}
-      x={ww / 2}
-      y={wh / 20}
-      width={ww / 10}
-      height={ww / 7}
-    />
-  );
-};
 
 class NewRandomCard extends Component {
   state = {
@@ -47,31 +33,27 @@ class NewRandomCard extends Component {
     }
     if (this.props.firstRandom) {
       if (prevProps.success !== this.props.success && this.props.success) {
-        this.props.setSuccessBoolean();
+        this.props.setSuccessBoolean(false);
+        console.log("1st");
       }
     }
   }
-
-  // componentWillUnmount() {
-  //   // ??????
-  // }
 
   loadImage = () => {
     const index = Math.floor((this.props.notShown.length - 1) * Math.random());
     const card = this.props.notShown[index];
     this.props.moveToShown(card);
-    const num = card.number;
-    const cardSign = card.sign;
+    localStorage.setItem("card-cardsBet", JSON.stringify(card));
     this.props.excludeCurrent(card.id);
     this.props.setStartBoolean(false);
-
+    console.log(this.props.shown);
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
       (image) => {
         this.setState(
           {
             image: image,
-            number: num,
-            sign: cardSign,
+            number: card.number,
+            sign: card.sign,
           },
           () => {
             setTimeout(() => {
@@ -84,18 +66,51 @@ class NewRandomCard extends Component {
   };
 
   render() {
-    const { image } = this.state;
+    let isCardFirsCardVisible = !this.props.firstCardIsHidden;
     return (
       <Group>
-        <Text
-          text={`${this.state.number} of ${this.state.sign}`}
-          fontSize={15}
-        />
-        <NewImageToRender im={this.state.image} />
+        <Transition
+          native
+          from={{
+            opacity: 0,
+          }}
+          enter={{
+            opacity: 1,
+          }}
+          leave={{
+            opacity: 0,
+          }}
+          keys={isCardFirsCardVisible}
+        >
+          {(props) =>
+            isCardFirsCardVisible && (
+              <NewImageToRender im={this.state.image} {...props} />
+            )
+          }
+        </Transition>
       </Group>
     );
   }
 }
+
+const NewImageToRender = (props) => {
+  const [image] = useImage(props.im);
+  return (
+    <animated.Image
+      image={image}
+      x={(ww / 100) * 54}
+      y={(wh / 100) * 10}
+      width={ww / 10}
+      height={ww / 7}
+      opacity={props.opacity}
+      shadowColor="black"
+      shadowBlur={10}
+      shadowOpacity={0.6}
+      shadowOffsetX={15}
+      shadowOffsetY={15}
+    />
+  );
+};
 
 const mapStateToProps = ({
   cards,
@@ -105,6 +120,7 @@ const mapStateToProps = ({
   hiddenCard,
   success,
   firstStart,
+  firstCardIsHidden,
 }) => ({
   cards,
   notShown,
@@ -113,6 +129,7 @@ const mapStateToProps = ({
   hiddenCard,
   success,
   firstStart,
+  firstCardIsHidden,
 });
 const mapDispatchToProps = {
   excludeCurrent,
@@ -120,7 +137,6 @@ const mapDispatchToProps = {
   setStartBoolean,
   showHiddenCard,
   setSuccessBoolean,
-  firstStartChange,
   moveToLastGuessed,
 };
 

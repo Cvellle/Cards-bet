@@ -1,16 +1,4 @@
 const allCards = [
-  // { number: 14, sign: "clubs", shown: false, id: 1},
-  // { number: 14, sign: "diamonds", shown: false, id: 1},
-  // { number: 14, sign: "hearts", shown: false, id: 1},
-  // { number: 14, sign: "spades", shown: false, id: 1},
-  // { number: 13, sign: "clubs", shown: false, id: 1},
-  // { number: 13, sign: "diamonds", shown: false, id: 1},
-  // { number: 13, sign: "hearts", shown: false, id: 1},
-  // { number: 13, sign: "spades", shown: false, id: 1},
-  // { number: 12, sign: "clubs", shown: false, id: 1},
-  // { number: 12, sign: "diamonds", shown: false, id: 1},
-  // { number: 12, sign: "hearts", shown: false, id: 1},
-  // { number: 12, sign: "spades", shown: false, id: 1},
   { number: 10, sign: "clubs", shown: false, id: 41 },
   { number: 10, sign: "diamonds", shown: false, id: 40 },
   { number: 10, sign: "hearts", shown: false, id: 39 },
@@ -51,9 +39,6 @@ const allCards = [
   { number: 1, sign: "diamonds", shown: false, id: 3 },
   { number: 1, sign: "hearts", shown: false, id: 2 },
   { number: 1, sign: "spades", shown: false, id: 1 },
-  // { number: 3, sign: "spades", shown: false, id: 9 },
-  // { number: 2, sign: "spades", shown: false, id: 5 },
-  // { number: 1, sign: "clubs", shown: false, id: 4 },
 ];
 
 const initialState = {
@@ -75,6 +60,9 @@ const initialState = {
   guessedCards: JSON.parse(localStorage.getItem("guessed-cardsBet")) || [],
   importedImages: [],
   lastGuessed: null,
+  firstCardIsHidden: false,
+  lastRound: false,
+  lastRoundColor: localStorage.getItem("lasRoundColor-cardsBet") || "gray",
 };
 
 export const reducer = (state = initialState, action) => {
@@ -131,6 +119,16 @@ export const reducer = (state = initialState, action) => {
       return { ...state, comparing: action.compare };
     case "SET_COMPARATION":
       return { ...state, comparation: action.comparationType };
+    case "SET_FIRSTCARD_HIDDEN":
+      return {
+        ...state,
+        firstCardIsHidden: action.firsCardHide,
+      };
+    // ROUNDS NUMBER
+    case "SET_ROUND":
+      return { ...state, lastRound: action.toRound };
+    case "SET_ROUND_COLOR":
+      return { ...state, lastRoundColor: action.toColor };
     default:
       return state;
   }

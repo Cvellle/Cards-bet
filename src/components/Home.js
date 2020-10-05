@@ -6,9 +6,13 @@ import "./css/home.css";
 class Home extends Component {
   render() {
     return (
-      <div>
-        <Cardboard />
-        <Interface />
+      <div className="home">
+        <div className="cardboard">
+          <Cardboard />
+        </div>
+        <div className="interface">
+          <Interface />
+        </div>
       </div>
     );
   }

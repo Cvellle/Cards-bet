@@ -1,16 +1,4 @@
-const allCards = [
-  // { number: 14, sign: "clubs", shown: false, id: 1},
-  // { number: 14, sign: "diamonds", shown: false, id: 1},
-  // { number: 14, sign: "hearts", shown: false, id: 1},
-  // { number: 14, sign: "spades", shown: false, id: 1},
-  // { number: 13, sign: "clubs", shown: false, id: 1},
-  // { number: 13, sign: "diamonds", shown: false, id: 1},
-  // { number: 13, sign: "hearts", shown: false, id: 1},
-  // { number: 13, sign: "spades", shown: false, id: 1},
-  // { number: 12, sign: "clubs", shown: false, id: 1},
-  // { number: 12, sign: "diamonds", shown: false, id: 1},
-  // { number: 12, sign: "hearts", shown: false, id: 1},
-  // { number: 12, sign: "spades", shown: false, id: 1},
+export default allCards = [
   { number: 10, sign: "clubs", shown: false, id: 41 },
   { number: 10, sign: "diamonds", shown: false, id: 40 },
   { number: 10, sign: "hearts", shown: false, id: 39 },

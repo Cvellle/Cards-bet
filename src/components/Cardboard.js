@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import RandomCard from "../components/RandomCard";
 import NewRandomCard from "../components/NewRandomCard";
 import ShownList from "../components/ShownList";
+import { Circle, Group, Text } from "react-konva";
 import "./css/home.css";
 import {
   firstStartChange,
@@ -10,74 +11,143 @@ import {
   setStartBoolean,
 } from "../store/actions";
 import cardBack from "../images/cardback.png";
-import { Stage, Layer, Image } from "react-konva";
+import { Stage, Layer, Image, Rect } from "react-konva";
 import useImage from "use-image";
+import Konva from "konva";
+
 const ww = window.innerWidth;
 const wh = window.innerHeight;
 
 class Cardboard extends Component {
+  state = {
+    rectRow1: this.makeRectRow(),
+    rectRow2: this.makeRectRow(),
+    lastRoundColor: "gray",
+  };
+
   componentDidMount() {
     this.props.firstStartChange(true);
+    console.log("fstar", this.props.firstStart);
+  }
+
+  makeRectRow() {
+    const items = [];
+    for (let i = 0; i < 15; i++) {
+      items.push({
+        x: i,
+        rotation: 45,
+        id: "node-" + i,
+        color: Konva.Util.getRandomColor(),
+        opacity: Math.random().toFixed(2) * (0.1 - 0.05) + 0.05,
+      });
+    }
+    return items;
   }
 
   render() {
     return (
       <div>
         <Stage
-          className="s"
+          className="canvasStage"
           width={window.innerWidth}
-          height={window.innerHeight / 2}
+          height={window.innerHeight}
           fill="green"
         >
-          <Layer x={20} y={20}>
-            <RandomCard loadImage={this.loadImage} />
+          <Layer>
+            {this.state.rectRow1.map((item) => (
+              <Rect
+                width={wh / 1.7}
+                height={wh / 1.7}
+                key={item.id}
+                name={item.id}
+                rotation={item.rotation}
+                x={(wh / 100) * 27.8 * item.x - 100}
+                y={(wh / 100) * -7}
+                fill={item.color}
+                radius={50}
+                opacity={item.opacity}
+              />
+            ))}
           </Layer>
-          <Layer
-            x={120}
-            y={20}
-            width={window.innerWidth}
-            height={window.innerHeight / 2}
-          >
+          <Layer>
+            {this.state.rectRow1.map((item) => (
+              <Rect
+                width={wh / 1.7}
+                height={wh / 1.7}
+                key={item.id}
+                name={item.id}
+                rotation={item.rotation}
+                x={(wh / 100) * 27.8 * item.x - 100}
+                y={wh / 2.065}
+                fill={item.color}
+                radius={50}
+                opacity={item.opacity}
+              />
+            ))}
+          </Layer>
+          <Layer width={ww} height={wh}>
+            <RandomCard loadImage={this.loadImage} />
             <CardBack className="cardBack" />
             {this.props.hiddenCard ? (
               <NewRandomCard className="newRandomCard" />
             ) : null}
           </Layer>
+          <Layer height={this.props.reset ? 0 : wh / 2}>
+            {this.props.firstStart ? (
+              <Group x={(ww / 100) * 90} y={(wh / 100) * 20}>
+                <Circle
+                  fill={this.props.lastRoundColor}
+                  radius={(ww / 100) * 5}
+                  opacity={0.5}
+                />
+                <Text
+                  fontSize={15}
+                  fill={"white"}
+                  opacity={0.4}
+                  y={(wh / 100) * 12}
+                  x={(ww / 100) * -4}
+                  text={"Last round mark"}
+                />
+              </Group>
+            ) : (
+              <Group x={(ww / 100) * 90} y={(wh / 100) * 20}>
+                <Circle
+                  fill={this.props.lastRoundColor}
+                  radius={(ww / 100) * 5}
+                  opacity={0.5}
+                />
+                <Text
+                  fontSize={15}
+                  fill={"white"}
+                  opacity={0.4}
+                  y={(wh / 100) * 12}
+                  x={(ww / 100) * -4}
+                  text="Last round mark"
+                />
+              </Group>
+            )}
+          </Layer>
           <ShownList />
         </Stage>
-        <div>
-          Already shown cards list:
-          <ul>
-            {this.props.shown.map((it) => (
-              <li key={it.id} className="listItem">
-                {it.number} {it.sign}
-              </li>
-            ))}
-          </ul>
-          Guesed cards list:
-          <ul>
-            {this.props.guessedCards &&
-              this.props.guessedCards.map((it) => (
-                <li key={it.id} className="listItem">
-                  {it.number} {it.sign} {it.biggerOrSmaller}
-                </li>
-              ))}
-          </ul>
-        </div>
       </div>
     );
   }
 }
 
-const CardBack = (prop) => {
+const CardBack = () => {
   const [image] = useImage(cardBack);
   return (
     <Image
       image={image}
-      x={ww / 2}
-      y={wh / 20}
+      x={(ww / 100) * 54}
+      y={(wh / 100) * 10}
       width={ww / 10}
       height={ww / 7}
+      shadowColor="black"
+      shadowBlur={10}
+      shadowOpacity={0.6}
+      shadowOffsetX={15}
+      shadowOffsetY={15}
     />
   );
 };
@@ -90,6 +160,9 @@ const mapStateToProps = ({
   start,
   success,
   firstStart,
+  lastRound,
+  lastRoundColor,
+  reset,
 }) => {
   return {
     hiddenCard,
@@ -99,6 +172,9 @@ const mapStateToProps = ({
     start,
     success,
     firstStart,
+    lastRound,
+    lastRoundColor,
+    reset,
   };
 };
 const mapDispatchToProps = {
@@ -108,208 +184,3 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cardboard);
-
-// import React, { Component } from "react";
-// import { connect } from "react-redux";
-// import RandomCard from "../components/RandomCard";
-// import NewRandomCard from "../components/NewRandomCard";
-// import ShownList from "../components/ShownList";
-// import "./css/home.css";
-// import {
-//   excludeCurrent,
-//   moveToShown,
-//   setStartBoolean,
-//   showHiddenCard,
-//   setSuccessBoolean,
-//   firstStartChange,
-//   resetGame,
-//   startComparing,
-// } from "../store/actions";
-// import cardBack from "../images/cardback.png";
-// import { Stage, Layer, Image } from "react-konva";
-// import useImage from "use-image";
-// const ww = window.innerWidth;
-// const wh = window.innerHeight;
-
-// class Cardboard extends Component {
-//   state = {
-//     image: null,
-//     number: null,
-//     sign: null,
-//   };
-
-//   componentDidMount() {
-//     this.props.firstStartChange(true);
-//   }
-
-//   componentDidUpdate(prevProps) {
-//     let index = Math.floor((this.props.notShown.length - 1) * Math.random());
-//     let storedCard = JSON.parse(localStorage.getItem("card-cardsBet"));
-
-//     if (prevProps.firstStart !== this.props.firstStart) {
-//       this.props.firstStart == true &&
-//         storedCard &&
-//         this.loadImage(storedCard, "dontAddToShown");
-//       !storedCard && this.loadImage(this.props.notShown[index], "addToShown");
-//       this.props.firstStartChange(false);
-//     }
-
-//     if (prevProps.reset !== this.props.reset) {
-//       this.props.reset == true &&
-//         this.loadImage(this.props.notShown[index], "addToShown");
-//       this.props.resetGame(false);
-//     }
-
-//     if (prevProps.lastGuessed !== this.props.lastGuessed) {
-//       if (this.props.game == "Smooth Bet") {
-//         console.log("suces", this.props.success);
-//         this.props.success == true
-//           ? this.putPreviousGuessedImage()
-//           : this.loadImage(this.props.notShown[index], "addToShown");
-//       } else {
-//         this.props.success &&
-//           this.loadImage(this.props.notShown[index], "addToShown");
-//         this.props.setSuccessBoolean(false);
-//       }
-//     }
-//   }
-
-//   putPreviousGuessedImage = () => {
-//     this.setState({
-//       image: this.props.lastGuessed,
-//     });
-//   };
-
-//   loadImage = (source, addOrNotToShown) => {
-//     //Take source card argument
-//     let card = null;
-//     card = source;
-//     localStorage.setItem("card-cardsBet", JSON.stringify(card));
-//     let num = card.number;
-//     let cardSign = card.sign;
-
-//     //Take addOrNotToShown argument
-//     let addOrNot = addOrNotToShown;
-//     addOrNot == "addToShown" && this.props.excludeCurrent(card.id);
-//     let isItSmallerProp = { smaller: "smaller", bigger: "bigger" };
-//     addOrNot == "addToShown" &&
-//       this.props.moveToShown({ ...card, isItSmallerProp });
-//     this.props.setStartBoolean(false);
-
-//     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
-//       (image) => {
-//         this.setState({
-//           image: image,
-//           number: num,
-//           sign: cardSign,
-//         });
-//       }
-//     );
-//     console.log("made");
-//   };
-
-//   render() {
-//     return (
-//       <div>
-//         <Stage
-//           className="s"
-//           width={window.innerWidth}
-//           height={window.innerHeight / 2}
-//           fill="green"
-//         >
-//           <Layer x={20} y={20}>
-//             <RandomCard loadImage={this.loadImage} />
-//           </Layer>
-//           <Layer
-//             x={120}
-//             y={20}
-//             width={window.innerWidth}
-//             height={window.innerHeight / 2}
-//           >
-//             <CardBack className="cardBack" />
-//             {this.props.hiddenCard ? (
-//               <NewRandomCard
-//                 className="newRandomCard"
-//                 loadImage={this.loadImage()}
-//                 image={this.state.image}
-//                 number={this.state.number}
-//                 number={this.state.number}
-//               />
-//             ) : null}
-//           </Layer>
-//           <ShownList />
-//         </Stage>
-//         <div>
-//           Already shown cards list:
-//           <ul>
-//             {this.props.shown.map((it) => (
-//               <li key={it.id} className="listItem">
-//                 {it.number} {it.sign}
-//               </li>
-//             ))}
-//           </ul>
-//           Guesed cards list:
-//           <ul>
-//             {this.props.guessedCards &&
-//               this.props.guessedCards.map((it) => (
-//                 <li key={it.id} className="listItem">
-//                   {it.number} {it.sign} {it.biggerOrSmaller}
-//                 </li>
-//               ))}
-//           </ul>
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
-// const CardBack = (prop) => {
-//   const [image] = useImage(cardBack);
-//   return (
-//     <Image
-//       image={image}
-//       x={ww / 2}
-//       y={wh / 20}
-//       width={ww / 10}
-//       height={ww / 7}
-//     />
-//   );
-// };
-
-// const mapStateToProps = ({
-//   game,
-//   cards,
-//   notShown,
-//   shown,
-//   start,
-//   hiddenCard,
-//   success,
-//   firstStart,
-//   reset,
-//   guessedCards,
-//   lastGuessed,
-// }) => ({
-//   game,
-//   cards,
-//   notShown,
-//   shown,
-//   start,
-//   hiddenCard,
-//   success,
-//   firstStart,
-//   reset,
-//   guessedCards,
-//   lastGuessed,
-// });
-// const mapDispatchToProps = {
-//   excludeCurrent,
-//   moveToShown,
-//   setStartBoolean,
-//   showHiddenCard,
-//   setSuccessBoolean,
-//   firstStartChange,
-//   resetGame,
-//   startComparing,
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Cardboard);

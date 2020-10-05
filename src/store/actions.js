@@ -130,3 +130,24 @@ export const changeComparation = (coparationType) => {
     coparationType,
   };
 };
+
+export const hideFirstCard = (firsCardHide) => {
+  return {
+    type: "SET_FIRSTCARD_HIDDEN",
+    firsCardHide,
+  };
+};
+
+export const setLastRound = (toRound) => {
+  return {
+    type: "SET_ROUND",
+    toRound,
+  };
+};
+
+export const setLastRoundColor = (toColor) => {
+  return {
+    type: "SET_ROUND_COLOR",
+    toColor,
+  };
+};

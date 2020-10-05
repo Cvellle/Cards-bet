@@ -1,25 +1,25 @@
-.randomCard,
-img {
-  width: 10vw !important;
-}
-
-.newRandomCard,
-.backCard {
-  position: absolute;
-  top: 40%;
-  left: 40%;
-}
-
-.s {
+.canvasStage > div {
   background-color: rgb(41, 4, 48);
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
   margin: 0;
 }
 
-input[type="number"] {
-  -moz-appearance: textfield;
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+button:active,
+input:active {
+  border: 0 !important;
+  outline: 0 !important;
+}
+
+button:focus,
+input:focus {
+  border: 0 !important;
+  outline: 0 !important;
 }
