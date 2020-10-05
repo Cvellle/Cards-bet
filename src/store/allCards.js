@@ -1,4 +1,4 @@
-export default allCards = [
+export const allCards = [
   { number: 10, sign: "clubs", shown: false, id: 41 },
   { number: 10, sign: "diamonds", shown: false, id: 40 },
   { number: 10, sign: "hearts", shown: false, id: 39 },

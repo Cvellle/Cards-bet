@@ -4,13 +4,12 @@ import FirstCard from "../components/FirstCard";
 import NewRandomCard from "../components/NewRandomCard";
 import ShownList from "../components/ShownList";
 import { Circle, Group, Text } from "react-konva";
-import "./css/home.css";
+import "./css/basic.css";
 import { firstStartChange } from "../store/actions";
 import cardBack from "../images/cardback.png";
 import { Stage, Layer, Image, Rect } from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
-
 const ww = window.innerWidth;
 const wh = window.innerHeight;
 
@@ -18,12 +17,10 @@ class Cardboard extends Component {
   state = {
     rectRow1: this.makeRectRow(),
     rectRow2: this.makeRectRow(),
-    lastRoundColor: "gray",
   };
 
   componentDidMount() {
     this.props.firstStartChange(true);
-    console.log("fstar", this.props.firstStart);
   }
 
   makeRectRow() {
@@ -106,6 +103,16 @@ class Cardboard extends Component {
                 x={ww > 1024 ? (ww / 100) * -4 : (ww / 100) * -14}
                 text={"Last round mark"}
               />
+              {this.props.allCoins <= 0 ? (
+                <Text
+                  fontSize={ww > 1024 ? (ww / 100) * 1.15 : (ww / 100) * 3.5}
+                  fill={"white"}
+                  opacity={0.4}
+                  y={ww > 1024 ? (wh / 100) * 12 : (ww / 100) * 10}
+                  x={ww > 1024 ? (ww / 100) * 30 : (wh / 100) * 4}
+                  text={"Last round mark"}
+                />
+              ) : null}
             </Group>
           </Layer>
           <ShownList />

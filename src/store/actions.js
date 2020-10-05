@@ -138,13 +138,7 @@ export const hideFirstCard = (firsCardHide) => {
   };
 };
 
-export const setLastRound = (toRound) => {
-  return {
-    type: "SET_ROUND",
-    toRound,
-  };
-};
-
+// ROUNDS
 export const setLastRoundColor = (toColor) => {
   return {
     type: "SET_ROUND_COLOR",

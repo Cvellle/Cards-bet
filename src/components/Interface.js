@@ -19,7 +19,7 @@ import {
   hideFirstCard,
   setLastRoundColor,
 } from "../store/actions";
-import "./css/home.css";
+import "./css/basic.css";
 import "./css/interface.css";
 
 class Interface extends Component {
@@ -40,6 +40,10 @@ class Interface extends Component {
 
     if (prevProps.shown.length !== this.props.shown.length) {
       this.props.hiddenCard && this.props.startComparing(true);
+    }
+
+    if (prevProps.allCoins !== this.props.allCoins) {
+      this.props.allCoins === 0 && this.resetGame();
     }
 
     if (prevProps.comparing !== this.props.comparing) {
@@ -93,7 +97,6 @@ class Interface extends Component {
       this.props.hiddenCard === true && this.props.showHiddenCard(false);
       this.props.startComparing(false);
       this.props.moveToGuessed(newGuessedObject);
-
       this.props.hideFirstCard(false);
     }, 2000);
     setTimeout(() => {
@@ -120,24 +123,21 @@ class Interface extends Component {
     }, 2000);
     setTimeout(() => {
       this.props.setSuccessBoolean(false);
-
       this.props.changeAllCoins(this.props.allCoins - this.props.betCoins);
+      this.props.changeEarnedCoins(Number(0));
       this.props.showHiddenCard(false);
       this.resetCards();
       this.props.startComparing(false);
       this.emptyLocalStorage();
-      this.props.changeEarnedCoins(Number(0));
       this.props.betCoins > this.props.allCoins &&
         this.props.changeBetCoins(this.props.allCoins);
       localStorage.setItem("lasRoundColor-cardsBet", "red");
-      localStorage.setItem("lasRoundText1-cardsBet", "Last round was");
-      localStorage.setItem("lasRoundText2-cardsBet", "a failure");
       this.props.setLastRoundColor("red");
       this.props.hideFirstCard(true);
     }, 1500);
     setTimeout(() => {
       this.props.hideFirstCard(false);
-    }, 3000);
+    }, 2500);
   };
 
   newGame = () => {
@@ -150,8 +150,6 @@ class Interface extends Component {
     this.props.changeEarnedCoins(Number(0));
     this.emptyLocalStorage();
     localStorage.setItem("lasRoundColor-cardsBet", "green");
-    localStorage.setItem("lasRoundText1-cardsBet", "Last round was");
-    localStorage.setItem("lasRoundText2-cardsBet", "successful");
     this.props.setLastRoundColor("green");
   };
 
@@ -197,8 +195,6 @@ class Interface extends Component {
 
   emptyLocalStorage() {
     localStorage.removeItem("lasRoundColor-cardsBet");
-    localStorage.removeItem("lasRoundText1-cardsBet");
-    localStorage.removeItem("lasRoundText2-cardsBet");
     localStorage.removeItem("allCoins-cardsBet");
     localStorage.removeItem("betCoins-cardsBet");
     localStorage.removeItem("earnedCoins-cardsBet");

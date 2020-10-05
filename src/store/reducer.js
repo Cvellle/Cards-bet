@@ -55,7 +55,6 @@ const initialState = {
   success: false,
   hiddenCard: false,
   comparing: false,
-  compariation: null,
   reset: false,
   guessedCards: JSON.parse(localStorage.getItem("guessed-cardsBet")) || [],
   importedImages: [],

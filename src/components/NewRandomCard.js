@@ -17,25 +17,12 @@ const wh = window.innerHeight;
 class NewRandomCard extends Component {
   state = {
     image: null,
-    number: null,
-    sign: null,
   };
 
   componentDidMount() {
     this.loadImage();
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.start !== this.props.start) {
-      this.props.start && this.loadImage();
-      this.props.setStartBoolean(false);
-    }
-    if (this.props.firstRandom) {
-      if (prevProps.success !== this.props.success && this.props.success) {
-        this.props.setSuccessBoolean(false);
-      }
-    }
-  }
   // Randoly taking a card from left unshown cards from the deck
   loadImage = () => {
     const index = Math.floor((this.props.notShown.length - 1) * Math.random());
@@ -44,14 +31,11 @@ class NewRandomCard extends Component {
     localStorage.setItem("card-cardsBet", JSON.stringify(card));
     this.props.excludeCurrent(card.id);
     this.props.setStartBoolean(false);
-    console.log(this.props.shown);
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
       (image) => {
         this.setState(
           {
             image: image,
-            number: card.number,
-            sign: card.sign,
           },
           () => {
             setTimeout(() => {

@@ -11,6 +11,7 @@ class ShownList extends Component {
     if (prevProps.guessedCards.length !== this.props.guessedCards.length) {
       this.importImages();
     }
+
     if (prevProps.firstStart !== this.props.firstStart) {
       this.props.firstStart && this.importImages();
     }

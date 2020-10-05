@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import Cardboard from "../components/Cardboard";
-import Interface from "../components/Interface";
-import "./css/home.css";
+import Cardboard from "./Cardboard";
+import Interface from "./Interface";
+import "./css/basic.css";
 
-class Home extends Component {
+class Game extends Component {
   render() {
     return (
-      <div className="home">
+      <div>
         <div className="cardboard">
           <Cardboard />
         </div>
@@ -18,4 +18,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default Game;

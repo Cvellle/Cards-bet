@@ -5,7 +5,10 @@ import {
   excludeCurrent,
   moveToShown,
   setStartBoolean,
+  showHiddenCard,
+  setSuccessBoolean,
   resetGame,
+  hideFirstCard,
 } from "../store/actions";
 import "./css/cardboard.css";
 import { Group, Text } from "react-konva";
@@ -17,7 +20,6 @@ const wh = window.innerHeight;
 class FirstCard extends Component {
   state = {
     image: null,
-    isButtonVisible: true,
   };
 
   componentDidUpdate(prevProps) {
@@ -64,6 +66,7 @@ class FirstCard extends Component {
     let addOrNot = addOrNotToShown;
     addOrNot === "addToShown" && this.props.excludeCurrent(card.id);
     addOrNot === "addToShown" && this.props.moveToShown(card);
+
     this.props.setStartBoolean(false);
 
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
@@ -73,7 +76,6 @@ class FirstCard extends Component {
         });
       }
     );
-    console.log("made");
   };
 
   render() {
@@ -156,6 +158,7 @@ const mapStateToProps = ({
   success,
   firstStart,
   reset,
+  guessedCards,
   lastGuessed,
   firstCardIsHidden,
 }) => ({
@@ -166,14 +169,19 @@ const mapStateToProps = ({
   success,
   firstStart,
   reset,
+  guessedCards,
   lastGuessed,
   firstCardIsHidden,
 });
+
 const mapDispatchToProps = {
   excludeCurrent,
   moveToShown,
   setStartBoolean,
+  showHiddenCard,
+  setSuccessBoolean,
   resetGame,
+  hideFirstCard,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FirstCard);
