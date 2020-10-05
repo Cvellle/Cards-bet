@@ -5,10 +5,7 @@ import {
   excludeCurrent,
   moveToShown,
   setStartBoolean,
-  showHiddenCard,
-  setSuccessBoolean,
   resetGame,
-  hideFirstCard,
 } from "../store/actions";
 import "./css/cardboard.css";
 import { Group, Text } from "react-konva";
@@ -17,7 +14,7 @@ import xImage from "../images/x.png";
 const ww = window.innerWidth;
 const wh = window.innerHeight;
 
-class RandomCard extends Component {
+class FirstCard extends Component {
   state = {
     image: null,
     isButtonVisible: true,
@@ -26,31 +23,26 @@ class RandomCard extends Component {
   componentDidUpdate(prevProps) {
     let index = Math.floor((this.props.notShown.length - 1) * Math.random());
     let storedCard = JSON.parse(localStorage.getItem("card-cardsBet"));
+    let shownIndex = this.props.notShown[index];
+    let add = "addToShown";
+    let dontAdd = "dontAddToShown";
 
     if (prevProps.firstStart !== this.props.firstStart) {
       this.props.firstStart === true &&
         storedCard &&
-        this.loadImage(storedCard, "dontAddToShown");
-      !storedCard && this.loadImage(this.props.notShown[index], "addToShown");
+        this.loadImage(storedCard, dontAdd);
+      !storedCard && this.loadImage(shownIndex, add);
     }
 
     if (prevProps.reset !== this.props.reset) {
-      this.props.reset === true &&
-        this.loadImage(this.props.notShown[index], "addToShown");
+      this.props.reset === true && this.loadImage(shownIndex, add);
       this.props.resetGame(false);
     }
 
     if (prevProps.lastGuessed !== this.props.lastGuessed) {
-      if (this.props.game === "Smooth Bet") {
-        console.log("suces", this.props.success);
-        this.props.success === true
-          ? this.putPreviousGuessedImage()
-          : this.loadImage(this.props.notShown[index], "addToShown");
-      } else {
-        this.props.success &&
-          this.loadImage(this.props.notShown[index], "addToShown");
-        this.props.setSuccessBoolean(false);
-      }
+      this.props.success === true
+        ? this.putPreviousGuessedImage()
+        : this.loadImage(shownIndex, add);
     }
   }
 
@@ -72,7 +64,6 @@ class RandomCard extends Component {
     let addOrNot = addOrNotToShown;
     addOrNot === "addToShown" && this.props.excludeCurrent(card.id);
     addOrNot === "addToShown" && this.props.moveToShown(card);
-
     this.props.setStartBoolean(false);
 
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
@@ -124,10 +115,10 @@ const ImageToRender = (props) => {
   return (
     <animated.Image
       image={image}
-      x={(ww / 100) * 35}
-      y={(wh / 100) * 10}
-      width={ww / 10}
-      height={ww / 7}
+      x={ww > 1024 ? (ww / 100) * 35 : ww / 2.9}
+      y={ww > 1024 ? (wh / 100) * 20 : (wh / 100) * 5}
+      width={ww > 1024 ? ww / 10 : ww / 3.5}
+      height={ww > 1024 ? ww / 7 : ww / 2.7}
       opacity={props.opacity}
       shadowColor="black"
       shadowBlur={10}
@@ -143,10 +134,10 @@ const FailureImage = (props) => {
   return (
     <animated.Image
       image={image}
-      x={(ww / 100) * 35}
-      y={(wh / 100) * 15}
-      width={ww / 10}
-      height={ww / 10}
+      x={ww > 1024 ? (ww / 100) * 35 : ww / 2.7}
+      y={ww > 1024 ? (wh / 100) * 23 : (wh / 100) * 10}
+      width={ww > 1024 ? ww / 10 : ww / 4}
+      height={ww > 1024 ? ww / 9 : ww / 5}
       opacity={props.opacity}
       shadowColor="black"
       shadowBlur={10}
@@ -158,8 +149,6 @@ const FailureImage = (props) => {
 };
 
 const mapStateToProps = ({
-  game,
-  cards,
   notShown,
   shown,
   start,
@@ -167,12 +156,9 @@ const mapStateToProps = ({
   success,
   firstStart,
   reset,
-  guessedCards,
   lastGuessed,
   firstCardIsHidden,
 }) => ({
-  game,
-  cards,
   notShown,
   shown,
   start,
@@ -180,7 +166,6 @@ const mapStateToProps = ({
   success,
   firstStart,
   reset,
-  guessedCards,
   lastGuessed,
   firstCardIsHidden,
 });
@@ -188,10 +173,7 @@ const mapDispatchToProps = {
   excludeCurrent,
   moveToShown,
   setStartBoolean,
-  showHiddenCard,
-  setSuccessBoolean,
   resetGame,
-  hideFirstCard,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RandomCard);
+export default connect(mapStateToProps, mapDispatchToProps)(FirstCard);

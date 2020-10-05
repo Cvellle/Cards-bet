@@ -101,8 +101,8 @@ button[disabled] {
 
 .coinsDdisplays {
   margin: 0% 0;
-  height: 100px;
   margin-left: auto;
+  margin-bottom: 7vh;
   flex: 1 1 33vw;
   color: rgba(255, 255, 255, 0.61);
   font-size: 1.3vw;
@@ -142,4 +142,45 @@ button[disabled] {
   border: none;
   border-radius: 1vw;
   padding: 1vw;
+}
+
+@media screen and (max-width: 1024px) {
+  .coinsDdisplays {
+    font-size: 3.5vw;
+    margin-top: 10vh;
+  }
+
+  .earned {
+    font-size: 6vw;
+  }
+
+  .allCoins {
+    font-size: 5vw;
+    height: 12vw;
+    width: 12vw;
+  }
+
+  .coinsDdisplays input {
+    height: 6vw;
+    font-size: 5vw;
+  }
+
+  .startButtons > i {
+    height: 12vw;
+    width: 12vw;
+    font-size: 7vw;
+  }
+
+  .newPlays > button {
+    height: 10vw;
+    margin: 2vw 0.4vw;
+    border-radius: 50%;
+    font-size: 4vw;
+    width: 28vw;
+  }
+
+  .newPlays > button:nth-child(1),
+  .newPlays > button:nth-child(2) {
+    border-radius: 4vw;
+  }
 }

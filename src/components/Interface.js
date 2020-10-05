@@ -17,7 +17,6 @@ import {
   resetImported,
   firstStartChange,
   hideFirstCard,
-  setLastRound,
   setLastRoundColor,
 } from "../store/actions";
 import "./css/home.css";
@@ -111,7 +110,6 @@ class Interface extends Component {
     let isItSmallerProp = { biggerOrSmaller: relationToPrevious };
     let newGuessedObject = { ...oldCardObject, ...isItSmallerProp };
     this.props.changeEarnedCoins(this.props.earnedCoins + this.props.betCoins);
-    this.props.notShown.length === 0 && this.onEnd();
     this.props.setSuccessBoolean(true);
   };
 
@@ -131,8 +129,6 @@ class Interface extends Component {
       this.props.changeEarnedCoins(Number(0));
       this.props.betCoins > this.props.allCoins &&
         this.props.changeBetCoins(this.props.allCoins);
-      this.props.allCoins >= 0 && this.lostAllCoins();
-      this.props.setLastRound(false);
       localStorage.setItem("lasRoundColor-cardsBet", "red");
       localStorage.setItem("lasRoundText1-cardsBet", "Last round was");
       localStorage.setItem("lasRoundText2-cardsBet", "a failure");
@@ -144,10 +140,6 @@ class Interface extends Component {
     }, 3000);
   };
 
-  onEnd = () => {
-    alert("You opened all cards");
-  };
-
   newGame = () => {
     this.startBetting();
     this.props.showHiddenCard(false);
@@ -157,7 +149,6 @@ class Interface extends Component {
     this.props.changeAllCoins(this.props.allCoins + this.props.earnedCoins);
     this.props.changeEarnedCoins(Number(0));
     this.emptyLocalStorage();
-    this.props.setLastRound(true);
     localStorage.setItem("lasRoundColor-cardsBet", "green");
     localStorage.setItem("lasRoundText1-cardsBet", "Last round was");
     localStorage.setItem("lasRoundText2-cardsBet", "successful");
@@ -184,8 +175,6 @@ class Interface extends Component {
     this.props.resetGuessedCards();
     this.props.resetImported();
   };
-
-  lostAllCoins = () => {};
 
   setBetAmount = (e) => {
     this.props.changeBetCoins(+e.target.value);
@@ -243,7 +232,7 @@ class Interface extends Component {
             All coins:<span className="allCoins">{this.props.allCoins}</span>
           </div>
           <div>
-            <span>Earned coins</span>
+            <span>Earned coins:</span>
             <span className="earned">{this.props.earnedCoins}</span>
           </div>
           <span>Coins to bet</span>
@@ -277,7 +266,6 @@ class Interface extends Component {
 
 const mapStateToProps = ({
   allCoins,
-  start,
   success,
   notShown,
   shown,
@@ -290,7 +278,6 @@ const mapStateToProps = ({
   lastRound,
 }) => ({
   allCoins,
-  start,
   success,
   notShown,
   shown,
@@ -319,7 +306,6 @@ const mapDispatchToProps = {
   resetImported,
   firstStartChange,
   hideFirstCard,
-  setLastRound,
   setLastRoundColor,
 };
 

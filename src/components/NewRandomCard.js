@@ -4,12 +4,11 @@ import {
   excludeCurrent,
   moveToShown,
   setStartBoolean,
-  showHiddenCard,
   setSuccessBoolean,
   moveToLastGuessed,
 } from "../store/actions";
 import "./css/cardboard.css";
-import { Image, Group } from "react-konva";
+import { Group } from "react-konva";
 import useImage from "use-image";
 import { Transition, animated } from "react-spring/dist/konva";
 const ww = window.innerWidth;
@@ -26,7 +25,7 @@ class NewRandomCard extends Component {
     this.loadImage();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps) {
     if (prevProps.start !== this.props.start) {
       this.props.start && this.loadImage();
       this.props.setStartBoolean(false);
@@ -34,11 +33,10 @@ class NewRandomCard extends Component {
     if (this.props.firstRandom) {
       if (prevProps.success !== this.props.success && this.props.success) {
         this.props.setSuccessBoolean(false);
-        console.log("1st");
       }
     }
   }
-
+  // Randoly taking a card from left unshown cards from the deck
   loadImage = () => {
     const index = Math.floor((this.props.notShown.length - 1) * Math.random());
     const card = this.props.notShown[index];
@@ -93,15 +91,16 @@ class NewRandomCard extends Component {
   }
 }
 
+// Left card on the display
 const NewImageToRender = (props) => {
   const [image] = useImage(props.im);
   return (
     <animated.Image
       image={image}
-      x={(ww / 100) * 54}
-      y={(wh / 100) * 10}
-      width={ww / 10}
-      height={ww / 7}
+      x={ww > 1024 ? (ww / 100) * 55 : ww / 2.9}
+      y={ww > 1024 ? (wh / 100) * 20 : (wh / 100) * 35}
+      width={ww > 1024 ? ww / 10 : ww / 3.5}
+      height={ww > 1024 ? ww / 7 : ww / 2.7}
       opacity={props.opacity}
       shadowColor="black"
       shadowBlur={10}
@@ -113,29 +112,25 @@ const NewImageToRender = (props) => {
 };
 
 const mapStateToProps = ({
-  cards,
   notShown,
   shown,
   start,
   hiddenCard,
   success,
-  firstStart,
   firstCardIsHidden,
 }) => ({
-  cards,
   notShown,
   shown,
   start,
   hiddenCard,
   success,
-  firstStart,
   firstCardIsHidden,
 });
+
 const mapDispatchToProps = {
   excludeCurrent,
   moveToShown,
   setStartBoolean,
-  showHiddenCard,
   setSuccessBoolean,
   moveToLastGuessed,
 };

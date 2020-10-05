@@ -1,15 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import RandomCard from "../components/RandomCard";
+import FirstCard from "../components/FirstCard";
 import NewRandomCard from "../components/NewRandomCard";
 import ShownList from "../components/ShownList";
 import { Circle, Group, Text } from "react-konva";
 import "./css/home.css";
-import {
-  firstStartChange,
-  startComparing,
-  setStartBoolean,
-} from "../store/actions";
+import { firstStartChange } from "../store/actions";
 import cardBack from "../images/cardback.png";
 import { Stage, Layer, Image, Rect } from "react-konva";
 import useImage from "use-image";
@@ -86,46 +82,31 @@ class Cardboard extends Component {
             ))}
           </Layer>
           <Layer width={ww} height={wh}>
-            <RandomCard loadImage={this.loadImage} />
+            <FirstCard loadImage={this.loadImage} />
             <CardBack className="cardBack" />
             {this.props.hiddenCard ? (
               <NewRandomCard className="newRandomCard" />
             ) : null}
           </Layer>
-          <Layer height={this.props.reset ? 0 : wh / 2}>
-            {this.props.firstStart ? (
-              <Group x={(ww / 100) * 90} y={(wh / 100) * 20}>
-                <Circle
-                  fill={this.props.lastRoundColor}
-                  radius={(ww / 100) * 5}
-                  opacity={0.5}
-                />
-                <Text
-                  fontSize={15}
-                  fill={"white"}
-                  opacity={0.4}
-                  y={(wh / 100) * 12}
-                  x={(ww / 100) * -4}
-                  text={"Last round mark"}
-                />
-              </Group>
-            ) : (
-              <Group x={(ww / 100) * 90} y={(wh / 100) * 20}>
-                <Circle
-                  fill={this.props.lastRoundColor}
-                  radius={(ww / 100) * 5}
-                  opacity={0.5}
-                />
-                <Text
-                  fontSize={15}
-                  fill={"white"}
-                  opacity={0.4}
-                  y={(wh / 100) * 12}
-                  x={(ww / 100) * -4}
-                  text="Last round mark"
-                />
-              </Group>
-            )}
+          <Layer>
+            <Group
+              x={ww > 1024 ? (ww / 100) * 90 : (ww / 100) * 85}
+              y={ww > 1024 ? (wh / 100) * 15 : (wh / 100) * 8}
+            >
+              <Circle
+                fill={this.props.lastRoundColor}
+                radius={(ww / 100) * 5}
+                opacity={0.5}
+              />
+              <Text
+                fontSize={ww > 1024 ? (ww / 100) * 1.15 : (ww / 100) * 3.5}
+                fill={"white"}
+                opacity={0.4}
+                y={ww > 1024 ? (wh / 100) * 12 : (ww / 100) * 10}
+                x={ww > 1024 ? (ww / 100) * -4 : (ww / 100) * -14}
+                text={"Last round mark"}
+              />
+            </Group>
           </Layer>
           <ShownList />
         </Stage>
@@ -139,10 +120,10 @@ const CardBack = () => {
   return (
     <Image
       image={image}
-      x={(ww / 100) * 54}
-      y={(wh / 100) * 10}
-      width={ww / 10}
-      height={ww / 7}
+      x={ww > 1024 ? (ww / 100) * 55 : ww / 2.9}
+      y={ww > 1024 ? (wh / 100) * 20 : (wh / 100) * 35}
+      width={ww > 1024 ? ww / 10 : ww / 3.5}
+      height={ww > 1024 ? ww / 7 : ww / 2.7}
       shadowColor="black"
       shadowBlur={10}
       shadowOpacity={0.6}
@@ -152,35 +133,15 @@ const CardBack = () => {
   );
 };
 
-const mapStateToProps = ({
-  hiddenCard,
-  shown,
-  guessedCards,
-  notShown,
-  start,
-  success,
-  firstStart,
-  lastRound,
-  lastRoundColor,
-  reset,
-}) => {
+const mapStateToProps = ({ hiddenCard, firstStart, lastRoundColor }) => {
   return {
     hiddenCard,
-    shown,
-    guessedCards,
-    notShown,
-    start,
-    success,
     firstStart,
-    lastRound,
     lastRoundColor,
-    reset,
   };
 };
 const mapDispatchToProps = {
   firstStartChange,
-  startComparing,
-  setStartBoolean,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cardboard);

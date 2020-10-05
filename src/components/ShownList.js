@@ -7,11 +7,6 @@ const ww = window.innerWidth;
 const wh = window.innerHeight;
 
 class ShownList extends Component {
-  state = {
-    shownCardsState: [],
-    cardsAreImported: false,
-  };
-
   componentDidUpdate(prevProps) {
     if (prevProps.guessedCards.length !== this.props.guessedCards.length) {
       this.importImages();
@@ -21,6 +16,7 @@ class ShownList extends Component {
     }
   }
 
+  // Diiferent actions depending on is it importing occured on load or after success
   importImages = () => {
     let guessed = this.props.guessedCards;
     if (!this.props.success) {
@@ -52,6 +48,8 @@ class ShownList extends Component {
   };
 
   render() {
+    //If cards in the Shown list come to 10, they move on from the other position
+    // biggerThanComparedCard is Condition for the arrow mark
     let biggerThanComparedCard = "biggerThanComparedCard";
     return (
       <Layer width={window.innerWidth} height={window.innerHeight}>
@@ -70,9 +68,9 @@ class ShownList extends Component {
               sides={3}
               radius={10}
               tension={0.5}
-              x={(wh / 100) * 25}
+              x={ww > 1024 ? (ww / 100) * 12 : (wh / 100) * 13}
               y={(wh / 100) * 2}
-              height={30}
+              height={ww > 1024 ? (wh / 100) * 4 : (wh / 100) * 2}
               fill={
                 el.lowerOrHigher === biggerThanComparedCard ? "green" : "red"
               }
@@ -94,8 +92,8 @@ const ImageInShownList = (props) => {
       image={image}
       x={props.x}
       y={props.y}
-      width={wh / 5}
-      height={wh / 3.75}
+      width={ww > 1024 ? ww / 10 : ww / 5}
+      height={ww > 1024 ? ww / 7 : ww / 3.8}
       shadowColor="black"
       shadowBlur={10}
       shadowOpacity={0.6}
@@ -106,18 +104,14 @@ const ImageInShownList = (props) => {
 };
 
 const mapStateToProps = ({
-  shown,
   guessedCards,
   importedImages,
   firstStart,
-  reset,
   success,
 }) => ({
-  shown,
   guessedCards,
   importedImages,
   firstStart,
-  reset,
   success,
 });
 
