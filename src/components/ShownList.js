@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import { Layer, Image, Group, RegularPolygon } from "react-konva";
 import useImage from "use-image";
 import { moveToImported } from "../store/actions";
@@ -17,30 +18,30 @@ class ShownList extends Component {
     }
   }
 
-  // Diiferent actions depending on is it importing occured on load or after success
+  // Different actions depending on is it importing occured on load or after success
   importImages = () => {
-    let guessed = this.props.guessedCards;
+    let { guessedCards } = this.props;
     if (!this.props.success) {
-      this.props.guessedCards.map((el, i) => {
+      guessedCards.map((el, i) => {
         import(`../images/cards/${el.number}_of_${el.sign}.svg`).then(
           (image) => {
             let arrowInfoObject = {
               path: image,
-              lowerOrHigher: guessed[i].biggerOrSmaller,
+              lowerOrHigher: guessedCards[i].biggerOrSmaller,
             };
             this.props.moveToImported(arrowInfoObject);
           }
         );
       });
     } else {
-      if (guessed.length !== 0) {
-        let index = this.props.guessedCards.length - 1;
+      if (guessedCards.length !== 0) {
+        let index = guessedCards.length - 1;
         import(
-          `../images/cards/${guessed[index].number}_of_${guessed[index].sign}.svg`
+          `../images/cards/${guessedCards[index].number}_of_${guessedCards[index].sign}.svg`
         ).then((image) => {
           let arrowInfoObject = {
             path: image,
-            lowerOrHigher: guessed[index].biggerOrSmaller,
+            lowerOrHigher: guessedCards[index].biggerOrSmaller,
           };
           this.props.moveToImported(arrowInfoObject);
         });
@@ -52,9 +53,10 @@ class ShownList extends Component {
     //If cards in the Shown list come to 10, they move on from the other position
     // biggerThanComparedCard is Condition for the arrow mark
     let biggerThanComparedCard = "biggerThanComparedCard";
+    let { importedImages } = this.props;
     return (
-      <Layer width={window.innerWidth} height={window.innerHeight}>
-        {this.props.importedImages.map((el, i) => (
+      <Layer>
+        {importedImages.map((el, i) => (
           <Group
             key={i}
             y={

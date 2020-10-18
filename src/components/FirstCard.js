@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import { Transition, animated } from "react-spring/dist/konva";
 import {
   excludeCurrent,
@@ -30,7 +31,7 @@ class FirstCard extends Component {
     let dontAdd = "dontAddToShown";
 
     if (prevProps.firstStart !== this.props.firstStart) {
-      this.props.firstStart === true &&
+      this.props.firstStart &&
         storedCard &&
         this.loadImage(storedCard, dontAdd);
       !storedCard && this.loadImage(shownIndex, add);
@@ -59,15 +60,11 @@ class FirstCard extends Component {
     let card = null;
     card = source;
     localStorage.setItem("card-cardsBet", JSON.stringify(card));
-    let num = card.number;
-    let cardSign = card.sign;
 
     //Take addOrNotToShown argument
     let addOrNot = addOrNotToShown;
     addOrNot === "addToShown" && this.props.excludeCurrent(card.id);
     addOrNot === "addToShown" && this.props.moveToShown(card);
-
-    this.props.setStartBoolean(false);
 
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
       (image) => {
@@ -80,6 +77,7 @@ class FirstCard extends Component {
 
   render() {
     let isCardFirsCardVisible = !this.props.firstCardIsHidden;
+    let { image } = this.state;
     return (
       <Group>
         {
@@ -98,11 +96,10 @@ class FirstCard extends Component {
           >
             {(props) =>
               isCardFirsCardVisible ? (
-                <ImageToRender im={this.state.image} {...props} />
+                <ImageToRender im={image} {...props} />
               ) : (
-                !this.props.success && (
-                  <FailureImage im={this.state.image} {...props} />
-                )
+                !this.props.success &&
+                !this.props.comparing && <FailureImage im={image} {...props} />
               )
             }
           </Transition>
@@ -153,7 +150,6 @@ const FailureImage = (props) => {
 const mapStateToProps = ({
   notShown,
   shown,
-  start,
   hiddenCard,
   success,
   firstStart,
@@ -164,7 +160,6 @@ const mapStateToProps = ({
 }) => ({
   notShown,
   shown,
-  start,
   hiddenCard,
   success,
   firstStart,

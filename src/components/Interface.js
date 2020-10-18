@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import {
   setStartBoolean,
   setSuccessBoolean,
@@ -33,13 +34,15 @@ class Interface extends Component {
     comparation: null,
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps !== this.props) {
       this.saveInLocalStorage();
     }
 
     if (prevProps.shown.length !== this.props.shown.length) {
-      this.props.hiddenCard && this.props.startComparing(true);
+      !this.props.reset &&
+        this.props.hiddenCard &&
+        this.props.startComparing(true);
     }
 
     if (prevProps.allCoins !== this.props.allCoins) {
@@ -55,19 +58,15 @@ class Interface extends Component {
     let swownCards = this.props.shown;
     let number1 = swownCards[swownCards.length - 1].number;
     let number2 = swownCards[swownCards.length - 2].number;
-    let comparationState = this.state.comparation;
-    if (comparationState === "smaller" && this.props.comparing) {
+    let { comparation } = this.state;
+    if (comparation === "smaller" && this.props.comparing) {
       +number1 < +number2 ? this.onSuccess() : this.onFailure();
     }
-    if (comparationState === "bigger" && this.props.comparing) {
+    if (comparation === "bigger" && this.props.comparing) {
       +number1 > +number2 ? this.onSuccess() : this.onFailure();
     }
     this.setState({ comparation: null });
   }
-
-  startBetting = () => {
-    this.props.setStartBoolean(true);
-  };
 
   isItSmaller = () => {
     this.setState(
@@ -89,22 +88,9 @@ class Interface extends Component {
         this.props.showHiddenCard(true);
       }
     );
-    this.props.changeComparation("bigger");
   };
 
   onSuccess = () => {
-    setTimeout(() => {
-      this.props.hiddenCard === true && this.props.showHiddenCard(false);
-      this.props.startComparing(false);
-      this.props.moveToGuessed(newGuessedObject);
-      this.props.hideFirstCard(false);
-    }, 2000);
-    setTimeout(() => {
-      this.props.hideFirstCard(true);
-    }, 1500);
-    setTimeout(() => {
-      this.props.hideFirstCard(false);
-    }, 2500);
     let relationToPrevious = null;
     this.state.comparation === "bigger"
       ? (relationToPrevious = "smallerThanComparedCard")
@@ -114,50 +100,56 @@ class Interface extends Component {
     let newGuessedObject = { ...oldCardObject, ...isItSmallerProp };
     this.props.changeEarnedCoins(this.props.earnedCoins + this.props.betCoins);
     this.props.setSuccessBoolean(true);
+    setTimeout(() => {
+      this.props.hideFirstCard(true);
+    }, 1500);
+    setTimeout(() => {
+      this.props.hiddenCard === true && this.props.showHiddenCard(false);
+      this.props.moveToGuessed(newGuessedObject);
+      this.props.hideFirstCard(false);
+      this.props.startComparing(false);
+    }, 2000);
   };
 
   onFailure = () => {
-    setTimeout(() => {
-      this.startBetting();
-      this.props.resetGame(true);
-    }, 2000);
     setTimeout(() => {
       this.props.setSuccessBoolean(false);
       this.props.changeAllCoins(this.props.allCoins - this.props.betCoins);
       this.props.changeEarnedCoins(Number(0));
       this.props.showHiddenCard(false);
-      this.resetCards();
-      this.props.startComparing(false);
       this.emptyLocalStorage();
       this.props.betCoins > this.props.allCoins &&
         this.props.changeBetCoins(this.props.allCoins);
       localStorage.setItem("lasRoundColor-cardsBet", "red");
       this.props.setLastRoundColor("red");
       this.props.hideFirstCard(true);
+      this.resetCards();
     }, 1500);
     setTimeout(() => {
+      this.props.resetGame(true);
+    }, 2000);
+    setTimeout(() => {
       this.props.hideFirstCard(false);
+      this.props.startComparing(false);
     }, 2500);
   };
 
   newGame = () => {
-    this.startBetting();
     this.props.showHiddenCard(false);
-    this.resetCards();
     this.props.startComparing(false);
-    this.props.resetGame(true);
     this.props.changeAllCoins(this.props.allCoins + this.props.earnedCoins);
     this.props.changeEarnedCoins(Number(0));
     this.emptyLocalStorage();
     localStorage.setItem("lasRoundColor-cardsBet", "green");
     this.props.setLastRoundColor("green");
+    this.props.resetGame(true);
+    this.resetCards();
   };
 
   resetGame = () => {
-    this.resetCards();
-    this.startBetting();
     this.emptyLocalStorage();
     this.props.showHiddenCard(false);
+    this.resetCards();
     this.props.startComparing(false);
     this.props.resetGame(true);
     this.props.changeAllCoins(100);
@@ -172,10 +164,6 @@ class Interface extends Component {
     this.props.resetShownCards();
     this.props.resetGuessedCards();
     this.props.resetImported();
-  };
-
-  setBetAmount = (e) => {
-    this.props.changeBetCoins(+e.target.value);
   };
 
   saveInLocalStorage = () => {
@@ -210,13 +198,27 @@ class Interface extends Component {
         <div className="gameControls"></div>
         <div className="interfaceButtons">
           <div className="startButtons">
-            <i className="fa fa-angle-down" onClick={this.isItSmaller}></i>
-            <i className="fa fa-angle-up" onClick={this.isItBigger}></i>
+            <i
+              className="fa fa-angle-down"
+              onClick={(e) => {
+                !this.props.reset && this.props.comparing
+                  ? null
+                  : this.isItSmaller();
+              }}
+            ></i>
+            <i
+              className="fa fa-angle-up"
+              onClick={(e) => {
+                !this.props.reset && this.props.comparing
+                  ? null
+                  : this.isItBigger();
+              }}
+            ></i>
           </div>
           <div className="newPlays">
             <button
               onClick={this.newGame}
-              disabled={this.props.earnedCoins == 0 && true}
+              disabled={this.props.earnedCoins === 0 && true}
             >
               New round
             </button>
@@ -236,22 +238,15 @@ class Interface extends Component {
             <input
               onChange={(e) => {
                 const value = e.target.value.replace(/[^0-9]/g, "");
-                this.props.changeBetCoins(value);
+                this.props.changeBetCoins(+value);
                 e.target.value > this.props.allCoins &&
                   this.props.changeBetCoins(this.props.allCoins);
               }}
               ref={this.myRef}
               value={this.props.betCoins}
               type="number"
-              onBlur={this.setBetAmount}
               min={1}
               max={this.props.allCoins}
-              onKeyPress={(event) => {
-                return (
-                  event.keyCode === 8 ||
-                  (event.charCode >= 48 && event.charCode <= 57)
-                );
-              }}
             />
           </div>
         </div>
@@ -272,6 +267,7 @@ const mapStateToProps = ({
   guessedCards,
   firstStart,
   lastRound,
+  reset,
 }) => ({
   allCoins,
   success,
@@ -284,6 +280,7 @@ const mapStateToProps = ({
   guessedCards,
   firstStart,
   lastRound,
+  reset,
 });
 const mapDispatchToProps = {
   setStartBoolean,

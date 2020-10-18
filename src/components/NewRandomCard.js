@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
+import { Group } from "react-konva";
+import useImage from "use-image";
+import { Transition, animated } from "react-spring/dist/konva";
 import {
   excludeCurrent,
   moveToShown,
@@ -8,9 +12,6 @@ import {
   moveToLastGuessed,
 } from "../store/actions";
 import "./css/cardboard.css";
-import { Group } from "react-konva";
-import useImage from "use-image";
-import { Transition, animated } from "react-spring/dist/konva";
 const ww = window.innerWidth;
 const wh = window.innerHeight;
 
@@ -23,7 +24,7 @@ class NewRandomCard extends Component {
     this.loadImage();
   }
 
-  // Randoly taking a card from left unshown cards from the deck
+  // Randomly taking a card from left unshown cards from the deck
   loadImage = () => {
     const index = Math.floor((this.props.notShown.length - 1) * Math.random());
     const card = this.props.notShown[index];
@@ -49,6 +50,7 @@ class NewRandomCard extends Component {
 
   render() {
     let isCardFirsCardVisible = !this.props.firstCardIsHidden;
+    let { image } = this.state;
     return (
       <Group>
         <Transition
@@ -65,9 +67,7 @@ class NewRandomCard extends Component {
           keys={isCardFirsCardVisible}
         >
           {(props) =>
-            isCardFirsCardVisible && (
-              <NewImageToRender im={this.state.image} {...props} />
-            )
+            isCardFirsCardVisible && <NewImageToRender im={image} {...props} />
           }
         </Transition>
       </Group>
@@ -75,7 +75,7 @@ class NewRandomCard extends Component {
   }
 }
 
-// Left card on the display
+// Right card on the display
 const NewImageToRender = (props) => {
   const [image] = useImage(props.im);
   return (

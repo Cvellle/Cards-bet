@@ -60,7 +60,6 @@ const initialState = {
   importedImages: [],
   lastGuessed: null,
   firstCardIsHidden: false,
-  lastRound: false,
   lastRoundColor: localStorage.getItem("lasRoundColor-cardsBet") || "gray",
 };
 
@@ -123,9 +122,8 @@ export const reducer = (state = initialState, action) => {
         ...state,
         firstCardIsHidden: action.firsCardHide,
       };
+
     // ROUNDS NUMBER
-    case "SET_ROUND":
-      return { ...state, lastRound: action.toRound };
     case "SET_ROUND_COLOR":
       return { ...state, lastRoundColor: action.toColor };
     default:

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import FirstCard from "../components/FirstCard";
 import NewRandomCard from "../components/NewRandomCard";
 import ShownList from "../components/ShownList";
@@ -38,6 +39,7 @@ class Cardboard extends Component {
   }
 
   render() {
+    let { rectRow1 } = this.state;
     return (
       <div>
         <Stage
@@ -47,7 +49,7 @@ class Cardboard extends Component {
           fill="green"
         >
           <Layer>
-            {this.state.rectRow1.map((item) => (
+            {rectRow1.map((item) => (
               <Rect
                 width={wh / 1.7}
                 height={wh / 1.7}
@@ -63,7 +65,7 @@ class Cardboard extends Component {
             ))}
           </Layer>
           <Layer>
-            {this.state.rectRow1.map((item) => (
+            {rectRow1.map((item) => (
               <Rect
                 width={wh / 1.7}
                 height={wh / 1.7}
