@@ -1,15 +1,15 @@
-Cards Bet Game - Nikola Cvetic - ESA Gaming task
+# Cards Bet Game - Nikola Cvetic - ESA Gaming task
 
-Open terminal in a speciffic folder, and then clone the project with:
+1. **Open terminal** in a speciffic folder, and then **clone** the project with:
 
-git clone https://github.com/Cvellle/Cards-bet.git
+2. :octocat: git clone https://github.com/Cvellle/Cards-bet-Nikola-Cvetic.git
 
-navigate to that folder with cd Cards-bet-Nikola-Cvetic
+3. **navigate** to that folder with cd Cards-bet-Nikola-Cvetic
 
-(or open it in terminal)
+(or open it in new terminal)
 
-npm i
+4. npm install
 
-npm start
+5. :rocket: npm start
 
-And Play!
+6. :+1: And Play! :sparkles:s
