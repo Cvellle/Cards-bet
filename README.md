@@ -4,7 +4,7 @@
 
 2. :octocat: git clone https://github.com/Cvellle/Cards-bet-Nikola-Cvetic.git
 
-3. **navigate** to that folder with cd Cards-bet-Nikola-Cvetic
+3. **navigate** to that folder with _cd Cards-bet-Nikola-Cvetic_
 
 (or open it in new terminal)
 
@@ -12,4 +12,4 @@
 
 5. :rocket: npm start
 
-6. :+1: And Play! :sparkles:s
+6. :+1: And Play! :sparkles:
