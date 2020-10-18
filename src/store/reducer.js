@@ -42,7 +42,6 @@ const allCards = [
 ];
 
 const initialState = {
-  game: "Smooth Bet",
   cards: allCards,
   notShown: JSON.parse(localStorage.getItem("notShown-cardsBet")) || allCards,
   shown: JSON.parse(localStorage.getItem("shown-cardsBet")) || [],

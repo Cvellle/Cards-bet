@@ -18,12 +18,12 @@ class ShownList extends Component {
     }
   }
 
-  // Different actions depending on is it importing occured on load or after success
+  // Different actions depending on is importing occured on load or after success
   importImages = () => {
     let { guessedCards } = this.props;
     if (!this.props.success) {
       guessedCards.map((el, i) => {
-        import(`../images/cards/${el.number}_of_${el.sign}.svg`).then(
+        return import(`../images/cards/${el.number}_of_${el.sign}.svg`).then(
           (image) => {
             let arrowInfoObject = {
               path: image,

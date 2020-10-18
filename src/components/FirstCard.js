@@ -12,7 +12,7 @@ import {
   hideFirstCard,
 } from "../store/actions";
 import "./css/cardboard.css";
-import { Group, Text } from "react-konva";
+import { Group } from "react-konva";
 import useImage from "use-image";
 import xImage from "../images/x.png";
 const ww = window.innerWidth;

@@ -24,10 +24,6 @@ import "./css/basic.css";
 import "./css/interface.css";
 
 class Interface extends Component {
-  constructor(props) {
-    super(props);
-    this.myRef = React.createRef();
-  }
   state = {
     firstCard: null,
     secondCard: null,
@@ -155,7 +151,7 @@ class Interface extends Component {
     this.props.changeAllCoins(100);
     this.props.changeBetCoins(10);
     this.props.changeEarnedCoins(0);
-    this.myRef.current.value = 10;
+    this.props.changeBetCoins(10);
     this.props.setLastRoundColor("gray");
   };
 
@@ -200,19 +196,19 @@ class Interface extends Component {
           <div className="startButtons">
             <i
               className="fa fa-angle-down"
-              onClick={(e) => {
+              onClick={
                 !this.props.reset && this.props.comparing
                   ? null
-                  : this.isItSmaller();
-              }}
+                  : this.isItSmaller
+              }
             ></i>
             <i
               className="fa fa-angle-up"
-              onClick={(e) => {
+              onClick={
                 !this.props.reset && this.props.comparing
                   ? null
-                  : this.isItBigger();
-              }}
+                  : this.isItBigger
+              }
             ></i>
           </div>
           <div className="newPlays">
@@ -242,7 +238,6 @@ class Interface extends Component {
                 e.target.value > this.props.allCoins &&
                   this.props.changeBetCoins(this.props.allCoins);
               }}
-              ref={this.myRef}
               value={this.props.betCoins}
               type="number"
               min={1}
