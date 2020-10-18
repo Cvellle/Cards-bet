@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import { Layer, Image, Group, RegularPolygon } from "react-konva";
 import useImage from "use-image";
+
 import { moveToImported } from "../store/actions";
 const ww = window.innerWidth;
 const wh = window.innerHeight;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import { Transition, animated } from "react-spring/dist/konva";
+
 import {
   excludeCurrent,
   moveToShown,
@@ -11,7 +11,6 @@ import {
   resetGame,
   hideFirstCard,
 } from "../store/actions";
-import "./css/cardboard.css";
 import { Group } from "react-konva";
 import useImage from "use-image";
 import xImage from "../images/x.png";

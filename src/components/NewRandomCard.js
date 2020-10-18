@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import { Group } from "react-konva";
 import useImage from "use-image";
 import { Transition, animated } from "react-spring/dist/konva";
+
 import {
   excludeCurrent,
   moveToShown,
@@ -11,7 +11,6 @@ import {
   setSuccessBoolean,
   moveToLastGuessed,
 } from "../store/actions";
-import "./css/cardboard.css";
 const ww = window.innerWidth;
 const wh = window.innerHeight;
 

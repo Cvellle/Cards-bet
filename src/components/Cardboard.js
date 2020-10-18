@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Circle, Group, Text } from "react-konva";
+import useImage from "use-image";
+import Konva from "konva";
 
 import FirstCard from "../components/FirstCard";
 import NewRandomCard from "../components/NewRandomCard";
 import ShownList from "../components/ShownList";
-import { Circle, Group, Text } from "react-konva";
-import "./css/basic.css";
 import { firstStartChange } from "../store/actions";
+import "./css/basic.css";
 import cardBack from "../images/cardback.png";
 import { Stage, Layer, Image, Rect } from "react-konva";
-import useImage from "use-image";
-import Konva from "konva";
+
 const ww = window.innerWidth;
 const wh = window.innerHeight;
 
