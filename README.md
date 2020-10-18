@@ -8,7 +8,7 @@
 git clone https://github.com/Cvellle/Cards-bet-Nikola-Cvetic.git
 ```
 
-**3.** **navigate** to that folder with:
+**3.** **Navigate** to that folder with:
 
 ```
 cd Cards-bet-Nikola-Cvetic
