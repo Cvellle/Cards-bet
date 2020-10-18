@@ -22,7 +22,7 @@ cd Cards-bet-Nikola-Cvetic
 npm install
 ```
 
-**5.** :rocket: Start the game:
+**5.** :rocket: **Start** the game:
 
 ```
 npm start
