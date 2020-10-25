@@ -47,10 +47,10 @@ const AllCards = [
   { number: 2, sign: "diamonds", shown: false, id: 7 },
   { number: 2, sign: "hearts", shown: false, id: 6 },
   { number: 2, sign: "spades", shown: false, id: 5 },
-  { number: 1, sign: "clubs", shown: false, id: 4 },
-  { number: 1, sign: "diamonds", shown: false, id: 3 },
-  { number: 1, sign: "hearts", shown: false, id: 2 },
-  { number: 1, sign: "spades", shown: false, id: 1 },
+  { number: 15, sign: "clubs", shown: false, id: 4 },
+  { number: 15, sign: "diamonds", shown: false, id: 3 },
+  { number: 15, sign: "hearts", shown: false, id: 2 },
+  { number: 15, sign: "spades", shown: false, id: 1 },
 ];
 
 export default AllCards;
