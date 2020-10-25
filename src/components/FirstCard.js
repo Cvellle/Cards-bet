@@ -37,14 +37,12 @@ class FirstCard extends Component {
     }
 
     if (prevProps.reset !== this.props.reset) {
-      this.props.reset === true && this.loadImage(shownIndex, add);
+      this.props.reset && this.loadImage(shownIndex, add);
       this.props.resetGame(false);
     }
 
     if (prevProps.lastGuessed !== this.props.lastGuessed) {
-      this.props.success === true
-        ? this.putPreviousGuessedImage()
-        : this.loadImage(shownIndex, add);
+      this.props.success === true ? this.putPreviousGuessedImage() : null;
     }
   }
 
@@ -55,12 +53,12 @@ class FirstCard extends Component {
   };
 
   loadImage = (source, addOrNotToShown) => {
-    //Take source card argument
+    //Takes source card argument
     let card = null;
     card = source;
     localStorage.setItem("card-cardsBet", JSON.stringify(card));
 
-    //Take addOrNotToShown argument
+    //Takes addOrNotToShown argument
     let addOrNot = addOrNotToShown;
     addOrNot === "addToShown" && this.props.excludeCurrent(card.id);
     addOrNot === "addToShown" && this.props.moveToShown(card);

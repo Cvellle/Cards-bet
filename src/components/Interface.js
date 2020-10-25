@@ -104,11 +104,12 @@ class Interface extends Component {
       this.props.moveToGuessed(newGuessedObject);
       this.props.hideFirstCard(false);
       this.props.startComparing(false);
-    }, 2000);
+    }, 2500);
   };
 
   onFailure = () => {
     setTimeout(() => {
+      this.resetCards();
       this.props.setSuccessBoolean(false);
       this.props.changeAllCoins(this.props.allCoins - this.props.betCoins);
       this.props.changeEarnedCoins(Number(0));
@@ -119,7 +120,6 @@ class Interface extends Component {
       localStorage.setItem("lasRoundColor-cardsBet", "red");
       this.props.setLastRoundColor("red");
       this.props.hideFirstCard(true);
-      this.resetCards();
     }, 1500);
     setTimeout(() => {
       this.props.resetGame(true);

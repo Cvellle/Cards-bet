@@ -31,7 +31,6 @@ class Cardboard extends Component {
       items.push({
         x: i,
         rotation: 45,
-        id: "node-" + i,
         color: Konva.Util.getRandomColor(),
         opacity: Math.random().toFixed(2) * (0.1 - 0.05) + 0.05,
       });
