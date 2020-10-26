@@ -1,4 +1,6 @@
-# Cards Bet Game - Nikola Cvetic - ESA Gaming task
+# Cards Bet Game
+
+**Live at**: https://card-bet-game.web.app
 
 **1.** **Open terminal** in a speciffic folder
 
