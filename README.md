@@ -1,10 +1,8 @@
 # Cards Bet Game
 
-## Live at
+## Live at: [card-bet-game.web.app](https://card-bet-game.web.app)
 
-https://card-bet-game.web.app
-
-## Instrucions
+## Instructions
 
 **1.** **Open terminal** in a speciffic folder
 
