@@ -10,8 +10,7 @@ const wh = window.innerHeight;
 
 class Card extends Component {
   render() {
-    let { success } = this.props;
-    let { isCardHidden, image } = this.props;
+    let { isCardHidden, image, success } = this.props;
     return (
       <Group>
         <Transition

@@ -129,7 +129,7 @@ class Cardboard extends Component {
 
   render() {
     let { rectRow1, firstImage, rightImage } = this.state;
-    let { firstCardIsHidden, success } = this.props;
+    let { firstCardIsHidden, success, reset } = this.props;
 
     return (
       <div>
@@ -174,12 +174,12 @@ class Cardboard extends Component {
           <Layer width={ww} height={wh}>
             <Card
               card="firstCard"
-              isCardHidden={!firstCardIsHidden && !this.props.reset}
+              isCardHidden={!firstCardIsHidden && !reset}
               image={firstImage}
               success={success}
             />
             <CardBack className="cardBack" />
-            {this.props.firstCardIsHidden ? (
+            {firstCardIsHidden ? (
               <Card
                 card="newRandomCard"
                 isCardHidden={firstCardIsHidden}

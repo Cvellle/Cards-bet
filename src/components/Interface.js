@@ -105,7 +105,7 @@ class Interface extends Component {
       this.props.moveToGuessed(newGuessedObject);
     }, 1500);
     setTimeout(() => {
-      this.props.hiddenCard === true && this.props.showHiddenCard(false);
+      this.props.hiddenCard && this.props.showHiddenCard(false);
       this.props.startComparing(false);
     }, 2500);
   };
