@@ -123,7 +123,7 @@ class Interface extends Component {
       localStorage.setItem("lasRoundColor-cardsBet", "red");
       this.props.setLastRoundColor("red");
       this.props.resetGame(true);
-    }, 300);
+    }, 500);
     setTimeout(() => {
       this.props.startComparing(false);
     }, 1000);

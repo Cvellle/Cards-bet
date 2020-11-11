@@ -50,8 +50,12 @@ class Cardboard extends Component {
       !storedCard && this.loadFirstImage(shownIndex, add);
     }
 
-    if (prevProps.reset !== this.props.reset) {
-      this.props.reset && this.loadFirstImage(shownIndex, add);
+    if (
+      prevProps.reset !== this.props.reset &&
+      this.props.reset &&
+      this.props.firstCardIsHidden
+    ) {
+      this.loadFirstImage(shownIndex, add);
       this.props.resetGame(false);
     }
 
