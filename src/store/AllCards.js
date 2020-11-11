@@ -1,4 +1,4 @@
-const AllCards = [
+export const AllCards = [
   { number: 14, sign: "clubs", shown: false, id: 52 },
   { number: 14, sign: "diamonds", shown: false, id: 51 },
   { number: 14, sign: "hearts", shown: false, id: 50 },
@@ -53,4 +53,4 @@ const AllCards = [
   { number: 15, sign: "spades", shown: false, id: 1 },
 ];
 
-export default AllCards;
+// export default AllCards;

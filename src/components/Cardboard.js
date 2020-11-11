@@ -4,10 +4,19 @@ import { Circle, Group, Text } from "react-konva";
 import useImage from "use-image";
 import Konva from "konva";
 
-import FirstCard from "../components/FirstCard";
-import NewRandomCard from "../components/NewRandomCard";
+import Card from "./Card";
 import ShownList from "../components/ShownList";
-import { firstStartChange } from "../store/actions";
+import {
+  firstStartChange,
+  excludeCurrent,
+  moveToShown,
+  setStartBoolean,
+  setSuccessBoolean,
+  moveToLastGuessed,
+  showHiddenCard,
+  hideFirstCard,
+  resetGame,
+} from "../store/actions";
 import "./css/basic.css";
 import cardBack from "../images/cardback.png";
 import { Stage, Layer, Image, Rect } from "react-konva";
@@ -19,10 +28,40 @@ class Cardboard extends Component {
   state = {
     rectRow1: this.makeRectRow(),
     rectRow2: this.makeRectRow(),
+    firstImage: null,
+    rightImage: null,
   };
 
   componentDidMount() {
     this.props.firstStartChange(true);
+  }
+
+  componentDidUpdate(prevProps) {
+    let index = Math.floor((this.props.notShown.length - 1) * Math.random());
+    let storedCard = JSON.parse(localStorage.getItem("card-cardsBet"));
+    let shownIndex = this.props.notShown[index];
+    let add = "addToShown";
+    let dontAdd = "dontAddToShown";
+
+    if (prevProps.firstStart !== this.props.firstStart) {
+      this.props.firstStart &&
+        storedCard &&
+        this.loadFirstImage(storedCard, dontAdd);
+      !storedCard && this.loadFirstImage(shownIndex, add);
+    }
+
+    if (prevProps.reset !== this.props.reset) {
+      this.props.reset && this.loadFirstImage(shownIndex, add);
+      this.props.resetGame(false);
+    }
+
+    if (prevProps.hiddenCard !== this.props.hiddenCard) {
+      this.props.hiddenCard && this.loadNewImage(shownIndex);
+    }
+
+    if (prevProps.lastGuessed !== this.props.lastGuessed) {
+      this.props.success ? this.putPreviousGuessedImage() : null;
+    }
   }
 
   makeRectRow() {
@@ -38,8 +77,60 @@ class Cardboard extends Component {
     return items;
   }
 
+  putPreviousGuessedImage = () => {
+    this.setState({
+      firstImage: this.props.lastGuessed,
+    });
+  };
+
+  loadFirstImage = (source, addOrNotToShown) => {
+    //Takes source card argument
+    let card = null;
+    card = source;
+    localStorage.setItem("card-cardsBet", JSON.stringify(card));
+
+    //Takes addOrNotToShown argument
+    let addOrNot = addOrNotToShown;
+    addOrNot === "addToShown" && this.props.excludeCurrent(card.id);
+    addOrNot === "addToShown" && this.props.moveToShown(card);
+
+    import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
+      (image) => {
+        this.setState({
+          firstImage: image,
+        });
+      }
+    );
+  };
+
+  loadNewImage = (source) => {
+    const card = source;
+    this.props.moveToShown(card);
+    localStorage.setItem("card-cardsBet", JSON.stringify(card));
+    this.props.excludeCurrent(card.id);
+    this.props.setStartBoolean(false);
+    import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
+      (image) => {
+        this.setState(
+          {
+            rightImage: image,
+          },
+          () => {
+            this.props.hideFirstCard(true);
+            this.props.moveToLastGuessed(image);
+            setTimeout(() => {
+              this.props.hideFirstCard(false);
+            }, 1500);
+          }
+        );
+      }
+    );
+  };
+
   render() {
-    let { rectRow1 } = this.state;
+    let { rectRow1, firstImage, rightImage } = this.state;
+    let { firstCardIsHidden } = this.props;
+
     return (
       <div>
         <Stage
@@ -81,10 +172,19 @@ class Cardboard extends Component {
             ))}
           </Layer>
           <Layer width={ww} height={wh}>
-            <FirstCard loadImage={this.loadImage} />
+            <Card
+              card="firstCard"
+              firstCardIsHidden={!firstCardIsHidden && !this.props.reset}
+              image={firstImage}
+              success={this.props.success}
+            />
             <CardBack className="cardBack" />
-            {this.props.hiddenCard ? (
-              <NewRandomCard className="newRandomCard" />
+            {this.props.firstCardIsHidden ? (
+              <Card
+                card="newRandomCard"
+                firstCardIsHidden={firstCardIsHidden}
+                image={rightImage}
+              />
             ) : null}
           </Layer>
           <Layer>
@@ -142,15 +242,43 @@ const CardBack = () => {
   );
 };
 
-const mapStateToProps = ({ hiddenCard, firstStart, lastRoundColor }) => {
+const mapStateToProps = ({
+  hiddenCard,
+  firstStart,
+  lastRoundColor,
+  shown,
+  notShown,
+  firstCardIsHidden,
+  lastGuessed,
+  success,
+  reset,
+  start,
+  comparing,
+}) => {
   return {
     hiddenCard,
     firstStart,
     lastRoundColor,
+    shown,
+    notShown,
+    firstCardIsHidden,
+    lastGuessed,
+    success,
+    reset,
+    start,
+    comparing,
   };
 };
 const mapDispatchToProps = {
   firstStartChange,
+  excludeCurrent,
+  moveToShown,
+  setStartBoolean,
+  setSuccessBoolean,
+  moveToLastGuessed,
+  showHiddenCard,
+  hideFirstCard,
+  resetGame,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cardboard);

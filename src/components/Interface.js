@@ -27,7 +27,7 @@ class Interface extends Component {
   state = {
     firstCard: null,
     secondCard: null,
-    comparation: null,
+    comparison: null,
   };
 
   componentDidUpdate(prevProps) {
@@ -35,39 +35,44 @@ class Interface extends Component {
       this.saveInLocalStorage();
     }
 
-    if (prevProps.shown.length !== this.props.shown.length) {
+    if (
+      prevProps.shown.length !== this.props.shown.length &&
       !this.props.reset &&
-        this.props.hiddenCard &&
-        this.props.startComparing(true);
+      this.props.hiddenCard
+    ) {
+      this.props.startComparing(true);
     }
 
-    if (prevProps.allCoins !== this.props.allCoins) {
-      this.props.allCoins === 0 && this.resetGame();
+    if (
+      prevProps.allCoins !== this.props.allCoins &&
+      this.props.allCoins === 0
+    ) {
+      this.resetGame();
     }
 
-    if (prevProps.comparing !== this.props.comparing) {
-      this.props.comparing && this.comparingFunction();
+    if (prevProps.comparing !== this.props.comparing && this.props.comparing) {
+      this.comparingFunction();
     }
   }
 
   comparingFunction() {
-    let swownCards = this.props.shown;
-    let number1 = swownCards[swownCards.length - 1].number;
-    let number2 = swownCards[swownCards.length - 2].number;
-    let { comparation } = this.state;
-    if (comparation === "smaller" && this.props.comparing) {
+    let shownCards = this.props.shown;
+    let number1 = shownCards[shownCards.length - 1].number;
+    let number2 = shownCards[shownCards.length - 2].number;
+    let { comparison } = this.state;
+    if (comparison === "smaller" && this.props.comparing) {
       +number1 < +number2 ? this.onSuccess() : this.onFailure();
     }
-    if (comparation === "bigger" && this.props.comparing) {
+    if (comparison === "bigger" && this.props.comparing) {
       +number1 > +number2 ? this.onSuccess() : this.onFailure();
     }
-    this.setState({ comparation: null });
+    this.setState({ comparison: null });
   }
 
   isItSmaller = () => {
     this.setState(
       {
-        comparation: "smaller",
+        comparison: "smaller",
       },
       () => {
         this.props.showHiddenCard(true);
@@ -78,7 +83,7 @@ class Interface extends Component {
   isItBigger = () => {
     this.setState(
       {
-        comparation: "bigger",
+        comparison: "bigger",
       },
       () => {
         this.props.showHiddenCard(true);
@@ -88,7 +93,7 @@ class Interface extends Component {
 
   onSuccess = () => {
     let relationToPrevious = null;
-    this.state.comparation === "bigger"
+    this.state.comparison === "bigger"
       ? (relationToPrevious = "smallerThanComparedCard")
       : (relationToPrevious = "biggerThanComparedCard");
     let oldCardObject = this.props.shown[this.props.shown.length - 2];
@@ -97,12 +102,10 @@ class Interface extends Component {
     this.props.changeEarnedCoins(this.props.earnedCoins + this.props.betCoins);
     this.props.setSuccessBoolean(true);
     setTimeout(() => {
-      this.props.hideFirstCard(true);
+      this.props.moveToGuessed(newGuessedObject);
     }, 1500);
     setTimeout(() => {
       this.props.hiddenCard === true && this.props.showHiddenCard(false);
-      this.props.moveToGuessed(newGuessedObject);
-      this.props.hideFirstCard(false);
       this.props.startComparing(false);
     }, 2500);
   };
@@ -119,15 +122,11 @@ class Interface extends Component {
         this.props.changeBetCoins(this.props.allCoins);
       localStorage.setItem("lasRoundColor-cardsBet", "red");
       this.props.setLastRoundColor("red");
-      this.props.hideFirstCard(true);
-    }, 1500);
-    setTimeout(() => {
       this.props.resetGame(true);
-    }, 2000);
+    }, 300);
     setTimeout(() => {
-      this.props.hideFirstCard(false);
       this.props.startComparing(false);
-    }, 2500);
+    }, 1000);
   };
 
   newGame = () => {
@@ -143,11 +142,11 @@ class Interface extends Component {
   };
 
   resetGame = () => {
-    this.emptyLocalStorage();
-    this.props.showHiddenCard(false);
     this.resetCards();
     this.props.startComparing(false);
     this.props.resetGame(true);
+    this.emptyLocalStorage();
+    this.props.showHiddenCard(false);
     this.props.changeAllCoins(100);
     this.props.changeBetCoins(10);
     this.props.changeEarnedCoins(0);

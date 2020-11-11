@@ -1,8 +1,8 @@
-import allCards from "./AllCards";
+import { AllCards } from "./AllCards";
 
 const initialState = {
-  cards: allCards,
-  notShown: JSON.parse(localStorage.getItem("notShown-cardsBet")) || allCards,
+  cards: AllCards,
+  notShown: JSON.parse(localStorage.getItem("notShown-cardsBet")) || AllCards,
   shown: JSON.parse(localStorage.getItem("shown-cardsBet")) || [],
   allCoins: Number(localStorage.getItem("allCoins-cardsBet")) || 100,
   betCoins: Number(localStorage.getItem("betCoins-cardsBet")) || 10,
