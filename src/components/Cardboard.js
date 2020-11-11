@@ -87,12 +87,6 @@ class Cardboard extends Component {
     //Takes source card argument
     let card = null;
     card = source;
-    localStorage.setItem("card-cardsBet", JSON.stringify(card));
-
-    //Takes addOrNotToShown argument
-    let addOrNot = addOrNotToShown;
-    addOrNot === "addToShown" && this.props.excludeCurrent(card.id);
-    addOrNot === "addToShown" && this.props.moveToShown(card);
 
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
       (image) => {
@@ -101,6 +95,12 @@ class Cardboard extends Component {
         });
       }
     );
+
+    //Takes addOrNotToShown argument
+    let addOrNot = addOrNotToShown;
+    addOrNot === "addToShown" && this.props.excludeCurrent(card.id);
+    addOrNot === "addToShown" && this.props.moveToShown(card);
+    localStorage.setItem("card-cardsBet", JSON.stringify(card));
   };
 
   loadNewImage = (source) => {
