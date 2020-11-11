@@ -129,7 +129,7 @@ class Cardboard extends Component {
 
   render() {
     let { rectRow1, firstImage, rightImage } = this.state;
-    let { firstCardIsHidden } = this.props;
+    let { firstCardIsHidden, success } = this.props;
 
     return (
       <div>
@@ -176,7 +176,7 @@ class Cardboard extends Component {
               card="firstCard"
               isCardHidden={!firstCardIsHidden && !this.props.reset}
               image={firstImage}
-              success={this.props}
+              success={success}
             />
             <CardBack className="cardBack" />
             {this.props.firstCardIsHidden ? (
