@@ -105,10 +105,6 @@ class Cardboard extends Component {
 
   loadNewImage = (source) => {
     const card = source;
-    this.props.moveToShown(card);
-    localStorage.setItem("card-cardsBet", JSON.stringify(card));
-    this.props.excludeCurrent(card.id);
-    this.props.setStartBoolean(false);
     import(`../images/cards/${card.number}_of_${card.sign}.svg`).then(
       (image) => {
         this.setState(
@@ -125,6 +121,11 @@ class Cardboard extends Component {
         );
       }
     );
+
+    this.props.moveToShown(card);
+    localStorage.setItem("card-cardsBet", JSON.stringify(card));
+    this.props.excludeCurrent(card.id);
+    this.props.setStartBoolean(false);
   };
 
   render() {
@@ -179,13 +180,11 @@ class Cardboard extends Component {
               success={success}
             />
             <CardBack className="cardBack" />
-            {firstCardIsHidden ? (
-              <Card
-                card="newRandomCard"
-                isCardHidden={firstCardIsHidden}
-                image={rightImage}
-              />
-            ) : null}
+            <Card
+              card="newRandomCard"
+              isCardHidden={firstCardIsHidden}
+              image={rightImage}
+            />
           </Layer>
           <Layer>
             <Group
