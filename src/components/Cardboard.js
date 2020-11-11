@@ -50,12 +50,8 @@ class Cardboard extends Component {
       !storedCard && this.loadFirstImage(shownIndex, add);
     }
 
-    if (
-      prevProps.reset !== this.props.reset &&
-      this.props.reset &&
-      this.props.firstCardIsHidden
-    ) {
-      this.loadFirstImage(shownIndex, add);
+    if (prevProps.reset !== this.props.reset) {
+      this.props.reset && this.loadFirstImage(shownIndex, add);
       this.props.resetGame(false);
     }
 
@@ -178,15 +174,15 @@ class Cardboard extends Component {
           <Layer width={ww} height={wh}>
             <Card
               card="firstCard"
-              firstCardIsHidden={!firstCardIsHidden && !this.props.reset}
+              isCardHidden={!firstCardIsHidden && !this.props.reset}
               image={firstImage}
-              success={this.props.success}
+              success={this.props}
             />
             <CardBack className="cardBack" />
             {this.props.firstCardIsHidden ? (
               <Card
                 card="newRandomCard"
-                firstCardIsHidden={firstCardIsHidden}
+                isCardHidden={firstCardIsHidden}
                 image={rightImage}
               />
             ) : null}

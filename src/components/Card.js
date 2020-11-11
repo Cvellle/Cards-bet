@@ -10,8 +10,8 @@ const wh = window.innerHeight;
 
 class Card extends Component {
   render() {
-    let { success, comparing } = this.props;
-    let { firstCardIsHidden, image } = this.props;
+    let { success } = this.props;
+    let { isCardHidden, image } = this.props;
     return (
       <Group>
         <Transition
@@ -25,20 +25,18 @@ class Card extends Component {
           leave={{
             opacity: 0,
           }}
-          keys={firstCardIsHidden}
+          keys={isCardHidden}
         >
           {this.props.card === "firstCard"
             ? (props) =>
-                firstCardIsHidden ? (
+                isCardHidden ? (
                   <ImageToRender im={image} {...props} />
                 ) : (
                   !success && <FailureImage im={image} {...props} />
                 )
             : this.props.card === "newRandomCard" &&
               ((props) =>
-                firstCardIsHidden && (
-                  <NewImageToRender im={image} {...props} />
-                ))}
+                isCardHidden && <NewImageToRender im={image} {...props} />)}
         </Transition>
       </Group>
     );
