@@ -5,12 +5,9 @@ import { Transition, animated } from "react-spring/dist/konva";
 
 import xImage from "../images/x.png";
 
-const ww = window.innerWidth;
-const wh = window.innerHeight;
-
 class Card extends Component {
   render() {
-    let { isCardHidden, image, success } = this.props;
+    let { isCardHidden, image, success, ww, wh, card } = this.props;
     return (
       <Group>
         <Transition
@@ -26,16 +23,20 @@ class Card extends Component {
           }}
           keys={isCardHidden}
         >
-          {this.props.card === "firstCard"
+          {card === "firstCard"
             ? (props) =>
                 isCardHidden ? (
-                  <ImageToRender im={image} {...props} />
+                  <ImageToRender im={image} {...props} ww={ww} wh={wh} />
                 ) : (
-                  !success && <FailureImage im={image} {...props} />
+                  !success && (
+                    <FailureImage im={image} ww={ww} wh={wh} {...props} />
+                  )
                 )
-            : this.props.card === "newRandomCard" &&
+            : card === "newRandomCard" &&
               ((props) =>
-                isCardHidden && <NewImageToRender im={image} {...props} />)}
+                isCardHidden && (
+                  <NewImageToRender im={image} ww={ww} wh={wh} {...props} />
+                ))}
         </Transition>
       </Group>
     );
@@ -47,10 +48,10 @@ const ImageToRender = (props) => {
   return (
     <animated.Image
       image={image}
-      x={ww > 1024 ? (ww / 100) * 35 : ww / 2.9}
-      y={ww > 1024 ? (wh / 100) * 20 : (wh / 100) * 5}
-      width={ww > 1024 ? ww / 10 : ww / 3.5}
-      height={ww > 1024 ? ww / 7 : ww / 2.7}
+      x={props.ww > 1024 ? (props.ww / 100) * 35 : props.ww / 2.9}
+      y={props.ww > 1024 ? (props.wh / 100) * 20 : (props.wh / 100) * 5}
+      width={props.ww > 1024 ? props.ww / 10 : props.ww / 3.5}
+      height={props.ww > 1024 ? props.ww / 7 : props.ww / 2.7}
       opacity={props.opacity}
       shadowColor="black"
       shadowBlur={10}
@@ -66,10 +67,10 @@ const FailureImage = (props) => {
   return (
     <animated.Image
       image={image}
-      x={ww > 1024 ? (ww / 100) * 35 : ww / 2.7}
-      y={ww > 1024 ? (wh / 100) * 23 : (wh / 100) * 10}
-      width={ww > 1024 ? ww / 10 : ww / 4}
-      height={ww > 1024 ? ww / 9 : ww / 5}
+      x={props.ww > 1024 ? (props.ww / 100) * 35 : props.ww / 2.7}
+      y={props.ww > 1024 ? (props.wh / 100) * 23 : (props.wh / 100) * 10}
+      width={props.ww > 1024 ? props.ww / 10 : props.ww / 4}
+      height={props.ww > 1024 ? props.ww / 9 : props.ww / 5}
       opacity={props.opacity}
       shadowColor="black"
       shadowBlur={10}
@@ -86,10 +87,10 @@ const NewImageToRender = (props) => {
   return (
     <animated.Image
       image={image}
-      x={ww > 1024 ? (ww / 100) * 55 : ww / 2.9}
-      y={ww > 1024 ? (wh / 100) * 20 : (wh / 100) * 35}
-      width={ww > 1024 ? ww / 10 : ww / 3.5}
-      height={ww > 1024 ? ww / 7 : ww / 2.7}
+      x={props.ww > 1024 ? (props.ww / 100) * 55 : props.ww / 2.9}
+      y={props.ww > 1024 ? (props.wh / 100) * 20 : (props.wh / 100) * 35}
+      width={props.ww > 1024 ? props.ww / 10 : props.ww / 3.5}
+      height={props.ww > 1024 ? props.ww / 7 : props.ww / 2.7}
       opacity={props.opacity}
       shadowColor="black"
       shadowBlur={10}

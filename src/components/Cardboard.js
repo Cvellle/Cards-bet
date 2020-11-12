@@ -178,12 +178,16 @@ class Cardboard extends Component {
               isCardHidden={!firstCardIsHidden && !reset}
               image={firstImage}
               success={success}
+              ww={ww}
+              wh={wh}
             />
             <CardBack className="cardBack" />
             <Card
               card="newRandomCard"
               isCardHidden={firstCardIsHidden}
               image={rightImage}
+              ww={ww}
+              wh={wh}
             />
           </Layer>
           <Layer>
