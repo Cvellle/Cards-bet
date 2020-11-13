@@ -101,6 +101,7 @@ class Interface extends Component {
     let newGuessedObject = { ...oldCardObject, ...isItSmallerProp };
     this.props.changeEarnedCoins(this.props.earnedCoins + this.props.betCoins);
     this.props.setSuccessBoolean(true);
+    // setTimeout is used because it is impossible to use CSS animations in Canvas
     setTimeout(() => {
       this.props.moveToGuessed(newGuessedObject);
     }, 1500);
@@ -111,6 +112,7 @@ class Interface extends Component {
   };
 
   onFailure = () => {
+    // setTimeout is used because it is impossible to use CSS animations in Canvas
     setTimeout(() => {
       this.resetCards();
       this.props.setSuccessBoolean(false);

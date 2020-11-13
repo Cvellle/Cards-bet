@@ -114,6 +114,7 @@ class Cardboard extends Component {
           () => {
             this.props.hideFirstCard(true);
             this.props.moveToLastGuessed(image);
+            // setTimeout is used because it is impossible to use CSS animations in Canvas
             setTimeout(() => {
               this.props.hideFirstCard(false);
             }, 1500);
